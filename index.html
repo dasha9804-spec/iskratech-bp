@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Бизнес-процессы ИскраТех</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #c9d1d9; }
+
+  .sidebar {
+    position: fixed; left: 0; top: 0; width: 300px; height: 100vh;
+    background: #161b22; border-right: 1px solid #21262d;
+    overflow-y: auto; padding: 24px 0; z-index: 10;
+  }
+  .sidebar h1 { font-size: 18px; color: #f0f6fc; padding: 0 20px 16px; border-bottom: 1px solid #21262d; }
+  .sidebar .updated { font-size: 12px; color: #484f58; padding: 8px 20px; }
+
+  .nav-item {
+    display: block; padding: 12px 20px; cursor: pointer;
+    border-left: 3px solid transparent; transition: all 0.15s;
+    text-decoration: none; color: inherit;
+  }
+  .nav-item:hover { background: #1c2333; }
+  .nav-item.active { background: #1c2333; border-left-color: #58a6ff; }
+  .nav-item .num { font-size: 11px; color: #484f58; font-weight: 600; letter-spacing: 1px; }
+  .nav-item .name { font-size: 14px; color: #c9d1d9; margin-top: 2px; }
+  .nav-item .desc { font-size: 12px; color: #484f58; margin-top: 2px; }
+  .nav-item.active .name { color: #58a6ff; }
+
+  .main {
+    margin-left: 300px; height: 100vh; overflow: auto;
+    display: flex; align-items: center; justify-content: center;
+    background: #0d1117; position: relative;
+  }
+
+  .viewer {
+    width: 100%; height: 100%; overflow: auto;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 20px;
+  }
+  .viewer img {
+    max-width: none; height: auto; cursor: grab;
+    background: #fff; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  .controls {
+    position: fixed; bottom: 20px; right: 20px; z-index: 10;
+    display: flex; gap: 8px;
+  }
+  .controls button {
+    width: 40px; height: 40px; border-radius: 8px; border: 1px solid #30363d;
+    background: #21262d; color: #c9d1d9; font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .controls button:hover { background: #30363d; }
+
+  .gap-section {
+    padding: 16px 20px; margin: 8px 12px;
+    background: #f8514915; border: 1px solid #f8514933; border-radius: 6px;
+  }
+  .gap-section h3 { color: #f85149; font-size: 13px; margin-bottom: 6px; }
+  .gap-section li { font-size: 12px; color: #c9d1d9; margin: 3px 0 3px 16px; }
+
+  .empty { color: #484f58; font-size: 16px; }
+
+  @media (max-width: 768px) {
+    .sidebar { width: 100%; height: auto; position: relative; }
+    .main { margin-left: 0; height: calc(100vh - 200px); }
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h1>ИскраТех</h1>
+  <div class="updated">Обновлено: 20 сентября 2026</div>
+
+  <a class="nav-item active" data-file="01" onclick="show(this, '01')">
+    <div class="num">01</div>
+    <div class="name">Оргструктура компании</div>
+    <div class="desc">Направления, отделы, сотрудники</div>
+  </a>
+  <a class="nav-item" onclick="show(this, '02')">
+    <div class="num">02</div>
+    <div class="name">Карта процессов</div>
+    <div class="desc">Управляющие / основные / поддерживающие</div>
+  </a>
+  <a class="nav-item" onclick="show(this, '03')">
+    <div class="num">03</div>
+    <div class="name">БП1: Отбор и запуск товара</div>
+    <div class="desc">6 swim lanes, 4 фазы, критический путь</div>
+  </a>
+  <a class="nav-item" onclick="show(this, '04')">
+    <div class="num">04</div>
+    <div class="name">БП2: Сертификация</div>
+    <div class="desc">Опциональный блок, Честный Знак</div>
+  </a>
+  <a class="nav-item" onclick="show(this, '05')">
+    <div class="num">05</div>
+    <div class="name">БП3: Логистика и доставка</div>
+    <div class="desc">Фабрика → растаможка → приёмка</div>
+  </a>
+  <a class="nav-item" onclick="show(this, '06')">
+    <div class="num">06</div>
+    <div class="name">БП4: Контент и карточки</div>
+    <div class="desc">Инструкции, фото, инфографика</div>
+  </a>
+  <a class="nav-item" onclick="show(this, '07')">
+    <div class="num">07</div>
+    <div class="name">БП5: Продажи на МП</div>
+    <div class="desc">Каналы, ежедневный цикл менеджера</div>
+  </a>
+  <a class="nav-item" onclick="show(this, '08')">
+    <div class="num">08</div>
+    <div class="name">БП6: Тех поддержка</div>
+    <div class="desc">3 потока, эскалации, обратная связь</div>
+  </a>
+  <a class="nav-item" onclick="show(this, '09')">
+    <div class="num">09</div>
+    <div class="name">БП7: Фин управленка</div>
+    <div class="desc">66 листов, P&amp;L, потоки данных</div>
+  </a>
+  <a class="nav-item" onclick="show(this, '10')">
+    <div class="num">10</div>
+    <div class="name">БП8: ВЭД воронка</div>
+    <div class="desc">2 воронки, 4 продукта</div>
+  </a>
+
+  <div class="gap-section">
+    <h3>Пробелы</h3>
+    <ul>
+      <li>БП5: нет регламента и KPI</li>
+      <li>БП6: нет SLA и тикетов</li>
+      <li>БП7: финплан без юрлиц</li>
+      <li>БП8: нет CRM и конверсий</li>
+      <li>FBS China, Импорт Чина — не описаны</li>
+    </ul>
+  </div>
+</div>
+
+<div class="main">
+  <div class="viewer" id="viewer">
+    <img id="diagram" src="" alt="Diagram" />
+  </div>
+</div>
+
+<div class="controls">
+  <button onclick="zoom(-0.2)" title="Уменьшить">-</button>
+  <button onclick="zoom(0.2)" title="Увеличить">+</button>
+  <button onclick="resetZoom()" title="Сбросить">1:1</button>
+</div>
+
+<script>
+const fileMap = {
+  '01': '01_%D0%9E%D1%80%D0%B3%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0.svg',
+  '02': '02_%D0%9A%D0%B0%D1%80%D1%82%D0%B0_%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81%D0%BE%D0%B2.svg',
+  '03': '03_%D0%91%D0%9F1_%D0%9E%D1%82%D0%B1%D0%BE%D1%80_%D0%B8_%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA_%D1%82%D0%BE%D0%B2%D0%B0%D1%80%D0%B0.svg',
+  '04': '04_%D0%91%D0%9F2_%D0%A1%D0%B5%D1%80%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F.svg',
+  '05': '05_%D0%91%D0%9F3_%D0%9B%D0%BE%D0%B3%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0.svg',
+  '06': '06_%D0%91%D0%9F4_%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D1%82_%D0%B8_%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D0%B8.svg',
+  '07': '07_%D0%91%D0%9F5_%D0%9F%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B8.svg',
+  '08': '08_%D0%91%D0%9F6_%D0%A2%D0%B5%D1%85_%D0%BF%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%BA%D0%B0.svg',
+  '09': '09_%D0%91%D0%9F7_%D0%A4%D0%B8%D0%BD_%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%BA%D0%B0.svg',
+  '10': '10_%D0%91%D0%9F8_%D0%92%D0%AD%D0%94_%D0%B2%D0%BE%D1%80%D0%BE%D0%BD%D0%BA%D0%B0.svg'
+};
+
+let scale = 1;
+const img = document.getElementById('diagram');
+
+function show(el, id) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  const file = fileMap[id];
+  if (file) {
+    img.src = file;
+    img.style.display = 'block';
+    scale = 1;
+    img.style.transform = `scale(${scale})`;
+  }
+}
+
+function zoom(delta) {
+  scale = Math.max(0.2, Math.min(5, scale + delta));
+  img.style.transform = `scale(${scale})`;
+  img.style.transformOrigin = 'top left';
+}
+
+function resetZoom() {
+  scale = 1;
+  img.style.transform = `scale(1)`;
+}
+
+// Load first diagram
+window.onload = () => { img.src = fileMap['01']; };
+
+// Scroll zoom
+document.getElementById('viewer').addEventListener('wheel', (e) => {
+  if (e.ctrlKey || e.metaKey) {
+    e.preventDefault();
+    zoom(e.deltaY > 0 ? -0.1 : 0.1);
+  }
+}, { passive: false });
+</script>
+
+</body>
+</html>
