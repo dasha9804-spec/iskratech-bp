@@ -63,45 +63,65 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="main" id="root"></div>
 <script>
 const P={
-org:{t:'Оргструктура',s:'5 направлений · 8 отделов · ~20 человек',sec:[
-{h:'Компания',m:`flowchart TD
-CEO[Иван Синчук\nГендиректор]
-CEO --> VW[VollWerk\nE-commerce]
-CEO --> FBS[FBS China]
-CEO --> KK[Китай Кредит]
-CEO --> VED[ВЭД\nОбразование]
-CEO --> IMP[Импорт Чина]
-VW --> OP[Отдел продаж\nИлья Беликов]
-VW --> PROD[Отдел продукта\nРинат]
-VW --> FIN[Фин отдел\nГаля]
-VW --> LOG[Логистика\nВаня Попов]
-VW --> TP[Тех поддержка\nРома]
-VW --> BUH[Бухгалтерия Ольга]
-VW --> JUR[Юристы\nВАКАНТ]
-VW --> MKT[Маркетинг Ihelper]
-OP --> WB[Ваня WB]
-OP --> OZ[Кирилл Ozon]
-OP --> YM[Алёна ЯМ]
-PROD --> DZ[Дизайнер]
-PROD --> DZ[Дизайнер]
-FIN --> FM[Маша]
-LOG --> LO[Оксана]
-TP --> TM[Миша клиенты]
-TP --> TL[Люба отзывы]
-TP --> TS[Саша ремонт]
-VED --> V1[Попов продукт]
-VED --> V2[Дарья опер.рук]
-VED --> V3[РОП]
-VED --> V4[Менеджер продаж\nВАКАНТ]
-VED --> V5[Ирина СММ]
-FBS --> F1[Лёша Китай]
-FBS --> F2[Mr Zhang]
+org:{t:'Оргструктура',s:'Структура по проектам',sec:[
+{h:'Управление и сервисные функции',m:`flowchart TD
+CEO[Директор\nИван Синчук] --> FIN[Фин служба\nГаля + Маша]
+CEO --> JUR[Юрист\nВАКАНТ]
+CEO --> BUH[Бухгалтерия\nОльга]
+CEO --> PROJ[Проекты]
+JUR --> PROJ
+FIN -.-> PROJ
 style CEO fill:#1a1a2e,color:#fff
+style FIN fill:#fff2cc,stroke:#d6b656
+style JUR fill:#fff2cc,stroke:#d6b656
+style BUH fill:#fff2cc,stroke:#d6b656`},
+{h:'Проекты компании',m:`flowchart TD
+PROJ[Проекты] --> VW[VollWerk]
+PROJ --> VED_P[ВЭД]
+PROJ --> FBS[FBS China]
+PROJ --> KK[Китай Кредит]
+PROJ --> IMP[Импорт Чина]
+VW --> TIK[Тикосум]
+VW --> OTP[Отпариватели]
+VW --> PZU[ПЗУ]
+VW --> ROB[Роботы]
+VW --> IKO[ИКО\nпылесосы]
 style VW fill:#e6194b,color:#fff
+style VED_P fill:#3cb44b,color:#fff
 style FBS fill:#4363d8,color:#fff
 style KK fill:#f58231,color:#fff
-style VED fill:#3cb44b,color:#fff
-style IMP fill:#911eb4,color:#fff`}]},
+style IMP fill:#911eb4,color:#fff`},
+{h:'Команды по проектам',m:`flowchart TD
+subgraph VW_TEAM[VollWerk]
+  direction TD
+  PROD[Отдел продукта\nРинат + Дизайнер]
+  OP[Отдел продаж\nИлья Беликов]
+  OP --> WB[Ваня WB]
+  OP --> OZ[Кирилл Ozon]
+  OP --> YM[Алёна ЯМ]
+  LOG[Логистика\nВаня Попов + Оксана]
+  TP[Тех поддержка\nРома]
+  TP --> TM[Миша клиенты]
+  TP --> TL[Люба отзывы]
+  TP --> TS[Саша ремонт]
+  MKT[Маркетинг\nIhelper СММ]
+end
+subgraph VED_TEAM[ВЭД]
+  direction TD
+  VD1[Иван Попов\nпродукт]
+  VD2[Дарья Любченкова\nоперационка]
+  VD3[РОП]
+  VD4[Менеджер продаж\nВАКАНТ]
+  VD5[Ирина Мурадова\nСММ]
+end
+subgraph FBS_TEAM[FBS China]
+  direction TD
+  FB1[Лёша\nсклад Китай]
+  FB2[Mr Zhang\nуправление]
+end
+style VW_TEAM fill:#1a1a2e11,stroke:#e6194b
+style VED_TEAM fill:#1a1a2e11,stroke:#3cb44b
+style FBS_TEAM fill:#1a1a2e11,stroke:#4363d8`}]},
 
 overview:{t:'Обзор системы',s:'Структура бизнеса ИскраТех',sec:[
 {h:'Структура управления',m:`flowchart TD
@@ -117,7 +137,7 @@ VW --> TIK[Тикосум]
 VW --> OTP[Отпариватели]
 VW --> PZU[ПЗУ]
 VW --> ROB[Роботы]
-VW --> PYL[Пылесосы]
+VW --> IKO2[ИКО\nпылесосы]
 style DIR fill:#1a1a2e,color:#fff
 style VW fill:#e6194b,color:#fff
 style VED_P fill:#3cb44b,color:#fff
