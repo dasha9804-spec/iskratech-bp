@@ -64,52 +64,38 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script>
 const P={
 org:{t:'Оргструктура',s:'Структура по проектам',sec:[
-{h:'Структура компании',m:`flowchart TD
-CEO[Директор\nИван Синчук]
-
-subgraph Сервис[Сервисные функции]
-  direction LR
-  FIN[Фин служба\nГаля + Маша]
-  JUR[Юрист\nВАКАНТ]
-  BUH[Бухгалтерия\nОльга]
-  MKT[Маркетинг]
-end
-
-subgraph PROJ_ALL[Проекты]
-  direction LR
-  VW[VollWerk]
-  IKO_P[ИКО]
-  VED_P[ВЭД]
-  FBS[FBS China]
-  KK[Китай Кредит]
-end
-
-subgraph VW_PROD[Товарные линейки VollWerk]
-  direction LR
-  TIK[Тикосум]
-  OTP[Отпариватели]
-  PZU[ПЗУ]
-  ROB[Роботы]
-end
-
-CEO --> Сервис
-CEO --> PROJ_ALL
-FIN -.-> PROJ_ALL
-JUR -.-> PROJ_ALL
-BUH -.-> PROJ_ALL
-MKT -.-> PROJ_ALL
-VW --> VW_PROD
-
+{h:'Управление → Сервисы → Проекты',m:`flowchart TD
+CEO[Директор\nИван Синчук] --> FIN[Фин служба\nГаля + Маша]
+CEO --> JUR[Юрист\nВАКАНТ]
+CEO --> BUH[Бухгалтерия\nОльга]
+CEO --> MKT[Маркетинг]
+CEO --> PROJ[Проекты]
+FIN --> PROJ
+JUR --> PROJ
+BUH --> PROJ
+MKT --> PROJ
 style CEO fill:#1a1a2e,color:#fff
+style FIN fill:#fff2cc,stroke:#d6b656
+style JUR fill:#fff2cc,stroke:#d6b656
+style BUH fill:#fff2cc,stroke:#d6b656
+style MKT fill:#fff2cc,stroke:#d6b656
+style PROJ fill:#dae8fc,stroke:#6c8ebf`},
+{h:'Проекты → Товарные линейки',m:`flowchart TD
+PROJ[Проекты] --> VW[VollWerk]
+PROJ --> IKO_P[ИКО]
+PROJ --> VED_P[ВЭД]
+PROJ --> FBS[FBS China]
+PROJ --> KK[Китай Кредит]
+VW --> TIK[Тикосум]
+VW --> OTP[Отпариватели]
+VW --> PZU[ПЗУ]
+VW --> ROB[Роботы]
 style VW fill:#e6194b,color:#fff
 style IKO_P fill:#42d4f4
 style VED_P fill:#3cb44b,color:#fff
 style FBS fill:#4363d8,color:#fff
 style KK fill:#f58231,color:#fff
-style FIN fill:#fff2cc,stroke:#d6b656
-style JUR fill:#fff2cc,stroke:#d6b656
-style BUH fill:#fff2cc,stroke:#d6b656
-style MKT fill:#fff2cc,stroke:#d6b656`},
+style PROJ fill:#dae8fc,stroke:#6c8ebf`},
 {h:'Команды по проектам',m:`flowchart TD
 subgraph VW_TEAM[VollWerk]
   direction TD
@@ -143,41 +129,24 @@ style FBS_TEAM fill:#1a1a2e11,stroke:#4363d8`}]},
 
 overview:{t:'Обзор системы',s:'Структура бизнеса ИскраТех',sec:[
 {h:'Структура управления',m:`flowchart TD
-DIR[Директор\nИван Синчук]
-
-subgraph SRV[Сервисные функции]
-  direction LR
-  FIN_S[Фин служба]
-  JUR_S[Юрист ВАКАНТ]
-  BUH_S[Бухгалтерия]
-  MKT_S[Маркетинг]
-end
-
-subgraph PRJ[Проекты]
-  direction LR
-  VW[VollWerk]
-  IKO_OV[ИКО]
-  VED_P[ВЭД]
-  FBS_OV[FBS China]
-  KK_OV[Китай Кредит]
-end
-
-subgraph VW_L[Товарные линейки]
-  direction LR
-  TIK[Тикосум]
-  OTP[Отпариватели]
-  PZU[ПЗУ]
-  ROB[Роботы]
-end
-
-DIR --> SRV
-DIR --> PRJ
-FIN_S -.-> PRJ
-JUR_S -.-> PRJ
-BUH_S -.-> PRJ
-MKT_S -.-> PRJ
-VW --> VW_L
-
+DIR[Директор] --> FIN_S[Фин служба]
+DIR --> JUR_S[Юрист ВАКАНТ]
+DIR --> BUH_S[Бухгалтерия]
+DIR --> MKT_S[Маркетинг]
+DIR --> PROJ[Проекты]
+FIN_S --> PROJ
+JUR_S --> PROJ
+BUH_S --> PROJ
+MKT_S --> PROJ
+PROJ --> VW[VollWerk]
+PROJ --> IKO_OV[ИКО]
+PROJ --> VED_P[ВЭД]
+PROJ --> FBS_OV[FBS China]
+PROJ --> KK_OV[Китай Кредит]
+VW --> TIK[Тикосум]
+VW --> OTP[Отпариватели]
+VW --> PZU[ПЗУ]
+VW --> ROB[Роботы]
 style DIR fill:#1a1a2e,color:#fff
 style VW fill:#e6194b,color:#fff
 style IKO_OV fill:#42d4f4
@@ -187,7 +156,8 @@ style KK_OV fill:#f58231,color:#fff
 style FIN_S fill:#fff2cc,stroke:#d6b656
 style JUR_S fill:#fff2cc,stroke:#d6b656
 style BUH_S fill:#fff2cc,stroke:#d6b656
-style MKT_S fill:#fff2cc,stroke:#d6b656`},
+style MKT_S fill:#fff2cc,stroke:#d6b656
+style PROJ fill:#dae8fc,stroke:#6c8ebf`},
 {h:'VollWerk: жизненный цикл товара',m:`flowchart LR
 FIND[Поиск] --> FAB[Переговоры\nс фабрикой] --> TEST[Тест] --> MAKE[Производство] --> CERT[Сертификация] --> SHIP[Доставка] --> CONT[Контент] --> SELL[Продажи] --> SUPP[Тех.поддержка]
 SUPP -.->|обратная связь| FIND
