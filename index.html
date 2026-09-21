@@ -4,204 +4,654 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Бизнес-процессы ИскраТех</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #c9d1d9; }
-
-  .sidebar {
-    position: fixed; left: 0; top: 0; width: 300px; height: 100vh;
-    background: #161b22; border-right: 1px solid #21262d;
-    overflow-y: auto; padding: 24px 0; z-index: 10;
-  }
-  .sidebar h1 { font-size: 18px; color: #f0f6fc; padding: 0 20px 16px; border-bottom: 1px solid #21262d; }
-  .sidebar .updated { font-size: 12px; color: #484f58; padding: 8px 20px; }
-
-  .nav-item {
-    display: block; padding: 12px 20px; cursor: pointer;
-    border-left: 3px solid transparent; transition: all 0.15s;
-    text-decoration: none; color: inherit;
-  }
-  .nav-item:hover { background: #1c2333; }
-  .nav-item.active { background: #1c2333; border-left-color: #58a6ff; }
-  .nav-item .num { font-size: 11px; color: #484f58; font-weight: 600; letter-spacing: 1px; }
-  .nav-item .name { font-size: 14px; color: #c9d1d9; margin-top: 2px; }
-  .nav-item .desc { font-size: 12px; color: #484f58; margin-top: 2px; }
-  .nav-item.active .name { color: #58a6ff; }
-
-  .main {
-    margin-left: 300px; height: 100vh; overflow: auto;
-    display: flex; align-items: center; justify-content: center;
-    background: #0d1117; position: relative;
-  }
-
-  .viewer {
-    width: 100%; height: 100%; overflow: auto;
-    display: flex; align-items: flex-start; justify-content: center;
-    padding: 20px;
-  }
-  .viewer img {
-    max-width: none; height: auto; cursor: grab;
-    background: #fff; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-  }
-
-  .controls {
-    position: fixed; bottom: 20px; right: 20px; z-index: 10;
-    display: flex; gap: 8px;
-  }
-  .controls button {
-    width: 40px; height: 40px; border-radius: 8px; border: 1px solid #30363d;
-    background: #21262d; color: #c9d1d9; font-size: 18px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .controls button:hover { background: #30363d; }
-
-  .gap-section {
-    padding: 16px 20px; margin: 8px 12px;
-    background: #f8514915; border: 1px solid #f8514933; border-radius: 6px;
-  }
-  .gap-section h3 { color: #f85149; font-size: 13px; margin-bottom: 6px; }
-  .gap-section li { font-size: 12px; color: #c9d1d9; margin: 3px 0 3px 16px; }
-
-  .empty { color: #484f58; font-size: 16px; }
-
-  @media (max-width: 768px) {
-    .sidebar { width: 100%; height: auto; position: relative; }
-    .main { margin-left: 0; height: calc(100vh - 200px); }
-  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#0d1117; color:#c9d1d9; display:flex; height:100vh; }
+  .sidebar { width:280px; min-width:280px; background:#161b22; border-right:1px solid #21262d; overflow-y:auto; padding:20px 0; }
+  .sidebar h1 { font-size:17px; color:#f0f6fc; padding:0 16px 12px; border-bottom:1px solid #21262d; }
+  .updated { font-size:11px; color:#484f58; padding:6px 16px 12px; }
+  .nav-item { display:block; padding:10px 16px; cursor:pointer; border-left:3px solid transparent; transition:all .15s; text-decoration:none; color:inherit; }
+  .nav-item:hover { background:#1c2333; }
+  .nav-item.active { background:#1c2333; border-left-color:#58a6ff; }
+  .nav-item .num { font-size:10px; color:#484f58; font-weight:600; letter-spacing:1px; }
+  .nav-item .name { font-size:13px; color:#c9d1d9; margin-top:1px; }
+  .nav-item.active .name { color:#58a6ff; }
+  .gap-box { margin:12px; padding:12px 14px; background:#f8514915; border:1px solid #f8514933; border-radius:6px; }
+  .gap-box h3 { color:#f85149; font-size:12px; margin-bottom:4px; }
+  .gap-box li { font-size:11px; color:#c9d1d9; margin:2px 0 2px 14px; }
+  .main { flex:1; overflow:auto; padding:24px; background:#0d1117; }
+  .diagram-wrap { display:none; }
+  .diagram-wrap.active { display:block; }
+  .diagram-wrap h2 { color:#f0f6fc; font-size:22px; margin-bottom:4px; }
+  .diagram-wrap .owner { color:#8b949e; font-size:13px; margin-bottom:16px; }
+  .mermaid { background:#fff; border-radius:8px; padding:20px; margin-bottom:20px; overflow-x:auto; }
+  .mermaid svg { max-width:100%; height:auto; }
+  .section-title { color:#58a6ff; font-size:15px; font-weight:600; margin:20px 0 8px; }
+  .info-table { border-collapse:collapse; width:100%; margin:8px 0 20px; }
+  .info-table th { background:#161b22; color:#8b949e; text-align:left; padding:8px 12px; font-size:12px; font-weight:600; border:1px solid #21262d; }
+  .info-table td { padding:8px 12px; font-size:13px; border:1px solid #21262d; }
+  .warn { background:#f8514922; border:1px solid #f8514944; border-radius:6px; padding:12px 16px; margin:12px 0; color:#f85149; font-size:13px; }
 </style>
 </head>
 <body>
-
 <div class="sidebar">
   <h1>ИскраТех</h1>
-  <div class="updated">Обновлено: 20 сентября 2026</div>
-
-  <a class="nav-item active" data-file="01" onclick="show(this, '01')">
-    <div class="num">01</div>
-    <div class="name">Оргструктура компании</div>
-    <div class="desc">Направления, отделы, сотрудники</div>
-  </a>
-  <a class="nav-item" onclick="show(this, '02')">
-    <div class="num">02</div>
-    <div class="name">Карта процессов</div>
-    <div class="desc">Управляющие / основные / поддерживающие</div>
-  </a>
-  <a class="nav-item" onclick="show(this, '03')">
-    <div class="num">03</div>
-    <div class="name">БП1: Отбор и запуск товара</div>
-    <div class="desc">6 swim lanes, 4 фазы, критический путь</div>
-  </a>
-  <a class="nav-item" onclick="show(this, '04')">
-    <div class="num">04</div>
-    <div class="name">БП2: Сертификация</div>
-    <div class="desc">Опциональный блок, Честный Знак</div>
-  </a>
-  <a class="nav-item" onclick="show(this, '05')">
-    <div class="num">05</div>
-    <div class="name">БП3: Логистика и доставка</div>
-    <div class="desc">Фабрика → растаможка → приёмка</div>
-  </a>
-  <a class="nav-item" onclick="show(this, '06')">
-    <div class="num">06</div>
-    <div class="name">БП4: Контент и карточки</div>
-    <div class="desc">Инструкции, фото, инфографика</div>
-  </a>
-  <a class="nav-item" onclick="show(this, '07')">
-    <div class="num">07</div>
-    <div class="name">БП5: Продажи на МП</div>
-    <div class="desc">Каналы, ежедневный цикл менеджера</div>
-  </a>
-  <a class="nav-item" onclick="show(this, '08')">
-    <div class="num">08</div>
-    <div class="name">БП6: Тех поддержка</div>
-    <div class="desc">3 потока, эскалации, обратная связь</div>
-  </a>
-  <a class="nav-item" onclick="show(this, '09')">
-    <div class="num">09</div>
-    <div class="name">БП7: Фин управленка</div>
-    <div class="desc">66 листов, P&amp;L, потоки данных</div>
-  </a>
-  <a class="nav-item" onclick="show(this, '10')">
-    <div class="num">10</div>
-    <div class="name">БП8: ВЭД воронка</div>
-    <div class="desc">2 воронки, 4 продукта</div>
-  </a>
-
-  <div class="gap-section">
-    <h3>Пробелы</h3>
-    <ul>
-      <li>БП5: нет регламента и KPI</li>
-      <li>БП6: нет SLA и тикетов</li>
-      <li>БП7: финплан без юрлиц</li>
-      <li>БП8: нет CRM и конверсий</li>
-      <li>FBS China, Импорт Чина — не описаны</li>
-    </ul>
-  </div>
+  <div class="updated">20 сентября 2026</div>
+  <a class="nav-item active" onclick="show('d01',this)"><div class="num">01</div><div class="name">Оргструктура</div></a>
+  <a class="nav-item" onclick="show('d02',this)"><div class="num">02</div><div class="name">Карта процессов</div></a>
+  <a class="nav-item" onclick="show('d03',this)"><div class="num">03</div><div class="name">БП1: Отбор и запуск товара</div></a>
+  <a class="nav-item" onclick="show('d04',this)"><div class="num">04</div><div class="name">БП2: Сертификация</div></a>
+  <a class="nav-item" onclick="show('d05',this)"><div class="num">05</div><div class="name">БП3: Логистика</div></a>
+  <a class="nav-item" onclick="show('d06',this)"><div class="num">06</div><div class="name">БП4: Контент и карточки</div></a>
+  <a class="nav-item" onclick="show('d07',this)"><div class="num">07</div><div class="name">БП5: Продажи на МП</div></a>
+  <a class="nav-item" onclick="show('d08',this)"><div class="num">08</div><div class="name">БП6: Тех поддержка</div></a>
+  <a class="nav-item" onclick="show('d09',this)"><div class="num">09</div><div class="name">БП7: Фин управленка</div></a>
+  <a class="nav-item" onclick="show('d10',this)"><div class="num">10</div><div class="name">БП8: ВЭД воронка</div></a>
+  <div class="gap-box"><h3>Пробелы</h3><ul>
+    <li>БП5: нет регламента и KPI</li>
+    <li>БП6: нет SLA и тикетов</li>
+    <li>БП7: финплан без юрлиц</li>
+    <li>БП8: нет CRM и конверсий</li>
+    <li>FBS China, Импорт Чина — не описаны</li>
+  </ul></div>
 </div>
-
 <div class="main">
-  <div class="viewer" id="viewer">
-    <img id="diagram" src="" alt="Diagram" />
-  </div>
+
+<!-- 01 ОРГСТРУКТУРА -->
+<div class="diagram-wrap active" id="d01">
+<h2>Оргструктура ИскраТех</h2>
+<div class="owner">5 направлений · 8 отделов · ~20 человек</div>
+<div class="mermaid">
+graph TD
+  CEO["<b>Иван Синчук</b><br/>Генеральный директор"]
+  CEO --> VW["<b>VollWerk</b><br/>E-commerce бытовая техника"]
+  CEO --> FBS["<b>FBS China</b><br/>Продажи из Китая на МП"]
+  CEO --> KK["<b>Китай Кредит</b><br/>Партнёрка с поставщиками"]
+  CEO --> VED["<b>ВЭД</b><br/>Образование + сопровождение"]
+  CEO --> IMP["<b>Импорт Чина</b><br/>Экспорт РФ товаров в Китай"]
+
+  VW --> OP["<b>Отдел продаж</b><br/>Илья Беликов"]
+  VW --> PROD["<b>Отдел продукта</b><br/>Ринат"]
+  VW --> FIN["<b>Фин. отдел</b><br/>Галя"]
+  VW --> LOG["<b>Логистика</b><br/>Ваня Попов"]
+  VW --> TP["<b>Тех поддержка</b><br/>Рома"]
+  VW --> BUH["<b>Бухгалтерия</b><br/>Ольга"]
+  VW --> JUR["<b>Юр. отдел</b><br/>Наташа &#40;аутсорс&#41;"]
+  VW --> MKT["<b>Маркетинг</b><br/>СММ Ihelper"]
+
+  OP --> OP1["Ваня Скрябин<br/>WB"]
+  OP --> OP2["Кирилл<br/>Ozon"]
+  OP --> OP3["Алёна<br/>ЯМ"]
+  PROD --> PR1["Дизайнер<br/>аутсорс"]
+  PROD --> PR2["Ваня<br/>помощник"]
+  FIN --> FIN1["Маша"]
+  LOG --> LOG1["Оксана"]
+  TP --> TP1["Миша<br/>клиенты"]
+  TP --> TP2["Люба<br/>отзывы МП"]
+  TP --> TP3["Саша<br/>ремонт"]
+
+  VED --> VED1["Иван Попов<br/>рук. продукта"]
+  VED --> VED2["Дарья Любченкова<br/>операц. рук."]
+  VED --> VED3["Артём Кожевников<br/>продажи"]
+  VED --> VED4["Ирина Мурадова<br/>СММ &#40;аутсорс&#41;"]
+  VED --> VED5["Анастасия Ерлих<br/>помощник"]
+
+  FBS --> FBS1["Лёша<br/>склад Китай"]
+  FBS --> FBS2["Mr Zhang<br/>управление"]
+
+  style CEO fill:#1a1a2e,color:#fff,stroke:#e94560
+  style VW fill:#e6194b,color:#fff
+  style FBS fill:#4363d8,color:#fff
+  style KK fill:#f58231,color:#fff
+  style VED fill:#3cb44b,color:#fff
+  style IMP fill:#911eb4,color:#fff
+</div>
 </div>
 
-<div class="controls">
-  <button onclick="zoom(-0.2)" title="Уменьшить">-</button>
-  <button onclick="zoom(0.2)" title="Увеличить">+</button>
-  <button onclick="resetZoom()" title="Сбросить">1:1</button>
+<!-- 02 КАРТА ПРОЦЕССОВ -->
+<div class="diagram-wrap" id="d02">
+<h2>Карта процессов компании</h2>
+<div class="owner">Управляющие → Основные → Поддерживающие</div>
+
+<div class="section-title">Управляющие процессы</div>
+<div class="mermaid">
+graph LR
+  UP1["Стратегическое<br/>планирование<br/><i>Иван Синчук</i>"] ~~~ UP2["<b>БП7</b> Финансовая<br/>управленка<br/><i>Галя</i>"] ~~~ UP3["Управление<br/>рисками<br/><i>Иван Синчук</i>"]
+  style UP1 fill:#dae8fc,stroke:#6c8ebf
+  style UP2 fill:#dae8fc,stroke:#6c8ebf
+  style UP3 fill:#dae8fc,stroke:#6c8ebf
+</div>
+
+<div class="section-title">Основные процессы (цепочка создания ценности)</div>
+<div class="mermaid">
+graph LR
+  BP1["<b>БП1</b><br/>Отбор и запуск<br/>товара<br/><i>Ринат + Илья</i>"] --> DEC{"Нужна<br/>сертификация?"}
+  DEC -->|Да| BP2["<b>БП2</b><br/>Сертификация<br/><i>Оксана</i>"]
+  DEC -->|Нет| BP3
+  BP2 --> BP3["<b>БП3</b><br/>Логистика<br/>и доставка<br/><i>Ваня Попов</i>"]
+  BP3 --> BP4["<b>БП4</b><br/>Контент<br/>и карточки<br/><i>Ринат</i>"]
+  BP4 --> BP5["<b>БП5</b><br/>Продажи<br/>на МП<br/><i>Илья Беликов</i>"]
+  BP5 --> BP6["<b>БП6</b><br/>Тех поддержка<br/><i>Рома</i>"]
+  BP5 -.->|новый товар| BP1
+
+  style BP1 fill:#d5e8d4,stroke:#82b366
+  style BP2 fill:#d5e8d4,stroke:#82b366,stroke-dasharray:5
+  style BP3 fill:#d5e8d4,stroke:#82b366
+  style BP4 fill:#d5e8d4,stroke:#82b366
+  style BP5 fill:#d5e8d4,stroke:#82b366
+  style BP6 fill:#d5e8d4,stroke:#82b366
+</div>
+
+<div class="section-title">Отдельные направления</div>
+<div class="mermaid">
+graph LR
+  BP8["<b>БП8</b> ВЭД воронка<br/><i>Иван Синчук</i>"] ~~~ FBSC["FBS China<br/><i>не описан</i>"] ~~~ IMPC["Импорт Чина<br/><i>не описан</i>"]
+  style BP8 fill:#d5e8d4,stroke:#82b366
+  style FBSC fill:#f5f5f5,stroke:#ccc,color:#999
+  style IMPC fill:#f5f5f5,stroke:#ccc,color:#999
+</div>
+
+<div class="section-title">Поддерживающие процессы</div>
+<div class="mermaid">
+graph LR
+  PD1["Бухгалтерия<br/><i>Ольга</i>"] ~~~ PD2["Юридическое<br/>сопровождение<br/><i>Наташа</i>"] ~~~ PD3["HR и найм"] ~~~ PD4["IT и<br/>инфраструктура"]
+  style PD1 fill:#fff2cc,stroke:#d6b656
+  style PD2 fill:#fff2cc,stroke:#d6b656
+  style PD3 fill:#fff2cc,stroke:#d6b656
+  style PD4 fill:#fff2cc,stroke:#d6b656
+</div>
+</div>
+
+<!-- 03 БП1 -->
+<div class="diagram-wrap" id="d03">
+<h2>БП1: Отбор и запуск товара</h2>
+<div class="owner">Владелец: Ринат + Илья · Срок: 2–4 недели</div>
+
+<div class="section-title">Фаза 1: Воронка отбора</div>
+<div class="mermaid">
+graph TD
+  A1["Илья: Аналитика МП-стат<br/>спрос, конкуренция"] --> A2["Илья: Анализ конкурентов"]
+  A2 --> A3["Илья: Анализ отзывов и болей"]
+  R1["Ринат: Техническая оценка<br/>характеристики, доработки"] --> R2["Ринат: Оценка доп. аксессуаров"]
+  A3 --> F1["Оксана: Предварительный<br/>расчёт логистики"]
+  R2 --> F1
+  F1 --> F2["Оксана: Требования к<br/>сертификации и стоимость"]
+  F2 --> F3["Предварительная<br/>юнит-экономика"]
+  F3 --> DEC{"Решение:<br/>запускаем?"}
+  DEC -->|Да| CARD["Создаётся карточка<br/>товара в системе"]
+  DEC -->|Нет| STOP["СТОП"]
+  DEC -->|Доработать| A1
+
+  style DEC fill:#fff2cc,stroke:#d6b656
+  style STOP fill:#f8cecc,stroke:#b85450
+  style CARD fill:#d5e8d4,stroke:#82b366
+</div>
+
+<div class="section-title">Фаза 2: Образец и тест</div>
+<div class="mermaid">
+graph TD
+  S1["Ринат: Запрос образца<br/>у фабрики"] --> S2["Лёша: Получение<br/>на склад в Китае"]
+  S2 --> S3["Ринат + нейросеть:<br/>ТЗ на тест"]
+  S3 --> S4["Лёша: Фото-видео<br/>фиксация по ТЗ"]
+  S4 --> S5["Лёша: Отправка<br/>результатов в РФ"]
+  S5 --> D1["Ринат: Просмотр<br/>видео и ТЗ"]
+  D1 --> D2{"Качество ОК?"}
+  D2 -->|Да| D3["Запускаем"]
+  D2 -->|Вопросы| D4["Созвон с Лёшей<br/>доп. тест"]
+  D2 -->|Нет| D5["Не запускаем"]
+
+  style D2 fill:#fff2cc,stroke:#d6b656
+  style D3 fill:#d5e8d4,stroke:#82b366
+  style D5 fill:#f8cecc,stroke:#b85450
+</div>
+
+<div class="section-title">Фаза 3: Параллельные потоки (привязка к 4 неделям фабрики)</div>
+<div class="mermaid">
+graph LR
+  subgraph "Неделя 1"
+    V1["Ринат: Визуал<br/>логотип, цвет, рендеры"]
+    C1["Ринат+Илья:<br/>Характеристики,<br/>название, артикул, ШК"]
+  end
+  subgraph "Неделя 2-3"
+    B1["Дизайнер: Коробка<br/>5 дней"]
+    B2["Дизайнер: Стикеры<br/>1 день"]
+    I1["Ринат: Инструкция<br/>перевод ChatGPT →<br/>переписка → картинки"]
+    OX["Оксана: Согласование<br/>формулировок с СО"]
+  end
+  subgraph "Параллельно (если новый товар)"
+    CERT["Оксана: Сертификация<br/>1 нед – неск. мес"]
+  end
+
+  V1 --> B1
+  C1 --> B1
+  B1 --> B2
+  C1 --> I1
+  I1 --> OX
+  OX --> CERT
+
+  style CERT fill:#fff2cc,stroke:#d6b656,stroke-dasharray:5
+</div>
+
+<div class="warn">КРИТИЧЕСКИЙ ПУТЬ: визуал (неделя 1) → макеты коробок и инструкций (неделя 3). Опоздание = задержка всей партии.</div>
+
+<div class="section-title">Фаза 4: Контент и запуск</div>
+<div class="mermaid">
+graph LR
+  F1["Ринат: Фотосессия<br/>через нейросеть"] --> F2["Ваня/Ринат:<br/>ТЗ на карточки"]
+  F2 --> F3["Дизайнер:<br/>Инфографика<br/>3-5 дней"]
+  F3 --> F4["Ринат: Финальная<br/>проверка"]
+  F4 --> L1["ОП: Создание<br/>карточек на МП"]
+  L1 --> L2["ОП: Загрузка<br/>контента"]
+  L2 --> L3["ОП: Настройка<br/>цены"]
+  L3 --> L4["Запуск продаж"]
+  L4 --> L5["Контроль первых<br/>продаж и отзывов"]
+
+  style L4 fill:#d5e8d4,stroke:#82b366
+</div>
+
+<table class="info-table">
+<tr><th>Этап</th><th>Ответственный</th><th>Срок</th></tr>
+<tr><td>Поиск и отбор</td><td>Илья + Ринат</td><td>2–5 дн</td></tr>
+<tr><td>Тест образца</td><td>Лёша (Китай)</td><td>3–5 дн</td></tr>
+<tr><td>Решение о запуске</td><td>Ринат</td><td>1–2 дн</td></tr>
+<tr><td>Визуал товара</td><td>Ринат</td><td>2–3 дн</td></tr>
+<tr><td>Характеристики</td><td>Ринат + Илья + Оксана</td><td>2–3 дн</td></tr>
+<tr><td>Дизайн коробки</td><td>Дизайнер</td><td>6 дн</td></tr>
+<tr><td>Инструкция</td><td>Ринат + Оксана</td><td>3–7 дн</td></tr>
+<tr><td>Сертификация</td><td>Оксана</td><td>1 нед – мес</td></tr>
+<tr><td>Контент для МП</td><td>Ринат + Ваня + Дизайнер</td><td>3–5 дн</td></tr>
+</table>
+</div>
+
+<!-- 04 БП2 -->
+<div class="diagram-wrap" id="d04">
+<h2>БП2: Сертификация и декларация</h2>
+<div class="owner">Владелец: Оксана · Опциональный процесс</div>
+
+<div class="mermaid">
+graph TD
+  START(("Старт")) --> DEC{"Нужна<br/>сертификация?"}
+  DEC -->|Нет| SKIP["Переход к БП3:<br/>Логистика"]
+  DEC -->|Да| P1
+
+  subgraph "1. Подготовка"
+    P1["Запросить тех.<br/>документацию с фабрики"] --> P2["Определить коды<br/>ТН ВЭД"]
+    P2 --> P3["Проверить необходимость<br/>ТР ТС / Нотификация ФСБ / ДС"]
+    P3 --> P4["Подготовить ДУЛ<br/>с производителем"]
+    P4 --> P5["Трехъязычный контракт<br/>с поставщиком"]
+  end
+
+  subgraph "2. Работа с СО"
+    S1["Подать заявку в СО"] --> S2["Согласовать макеты<br/>ДС/СС"]
+    S2 --> S3["Правки инструкции<br/>от СО"]
+    S3 --> S4["Ринат+Оксана: версия<br/>для сертификатчиков"]
+    S4 --> S5["Согласовать инвойс<br/>и упаковочный лист"]
+  end
+
+  subgraph "3. Образцы"
+    D1["Лёша: контроль<br/>готовности на фабрике"] --> D2["Лёша: проверка<br/>оклейки груза"]
+    D2 --> D3["Оксана: номинировать<br/>экспедитора"]
+    D3 --> D4["Транспортные документы"]
+    D4 --> D5["Страхование груза"]
+    D5 --> D6["Отслеживание груза"]
+    D6 --> D7["Растаможка"]
+    D7 --> D8["Доставка в лабораторию"]
+    D8 --> DEC2{"Честный Знак?"}
+    DEC2 -->|Да| D9["Заказать GTIN +<br/>эмитировать DataMatrix"]
+    DEC2 -->|Нет| D10["—"]
+  end
+
+  subgraph "4. Итог"
+    R1["Получить разрешительные<br/>документы"] --> R2["Проверить в реестрах<br/>Росаккредитации"]
+  end
+
+  P5 --> S1
+  S5 --> D1
+  D9 --> R1
+  D10 --> R1
+  R2 --> FIN(("Конец"))
+
+  style DEC fill:#fff2cc,stroke:#d6b656
+  style DEC2 fill:#fff2cc,stroke:#d6b656
+  style SKIP fill:#d5e8d4,stroke:#82b366
+</div>
+</div>
+
+<!-- 05 БП3 -->
+<div class="diagram-wrap" id="d05">
+<h2>БП3: Логистика и доставка партии</h2>
+<div class="owner">Владелец: Ваня Попов + Оксана</div>
+
+<div class="mermaid">
+graph TD
+  subgraph "1. Подготовка"
+    L1["Оксана: Коды ТН ВЭД"] --> L2["Проверить разрешительные<br/>документы"]
+    L2 --> L3["Трехъязычный контракт"]
+    L3 --> L4["Согласовать инвойс и<br/>упаковочный лист с брокером"]
+    L4 --> L5["Рассчитать итоговую<br/>себестоимость"]
+    L5 --> L6["Оплата поставщику"]
+  end
+
+  subgraph "2. Отправка груза"
+    SH1["Лёша: Проверка печатных<br/>материалов на товар"] --> SH2["Лёша: Контроль готовности<br/>финальные фото"]
+    SH2 --> SH3["Лёша: Проверка оклейки<br/>манипуляц. знаки, этикетки"]
+    SH3 --> SH4["Оксана: Номинировать<br/>экспедитора"]
+    SH4 --> SH5["Экспедитор: Забор груза"]
+    SH5 --> SH6["Транспортные документы<br/>Коносамент/СМГС/ЦМР"]
+    SH6 --> SH7["Оксана: Проверить<br/>веса и объёмы"]
+    SH7 --> SH8["Страхование груза"]
+    SH8 --> SH9["Отслеживание движения"]
+  end
+
+  subgraph "3. Растаможка"
+    C1["Оксана → Брокер:<br/>полный пакет документов"] --> C2["Оксана: Пополнить ЕЛС<br/>сбор + пошлина + НДС"]
+    C2 --> C3["Брокер: Подать ДТ"]
+    C3 --> C4["Выпуск разрешён"]
+  end
+
+  subgraph "4. Приёмка"
+    DL1["Ваня Попов: Вывоз<br/>со склада СВХ"] --> DL2["Доставка по РФ<br/>до склада"]
+    DL2 --> DL3["Приёмка товара"]
+    DL3 --> DL4["Закрывающие документы<br/>УПД, отчёт агента"]
+  end
+
+  L6 --> SH1
+  SH9 --> C1
+  C4 --> DL1
+
+  style C4 fill:#d5e8d4,stroke:#82b366
+</div>
+</div>
+
+<!-- 06 БП4 -->
+<div class="diagram-wrap" id="d06">
+<h2>БП4: Контент и карточки МП</h2>
+<div class="owner">Владелец: Ринат · Единый комплект для всех МП</div>
+
+<div class="mermaid">
+graph TD
+  subgraph "Входы"
+    IN1["Фото/видео от фабрики"]
+    IN2["Результаты теста от Лёши"]
+    IN3["УТП из БП1"]
+  end
+
+  subgraph "Инструкция"
+    I1["Ринат: Берёт кит.<br/>оригинал"] --> I2["Перевод через ChatGPT"]
+    I2 --> I3["Переписывает: ТБ,<br/>гарантия, отказ от отв."]
+    I3 --> I4["Вставляет картинки"]
+    I4 --> I5["Оксана: Проверка<br/>для сертификации"]
+    I5 -->|Правки| I3
+    I5 -->|ОК| DONE1["Инструкция готова"]
+  end
+
+  subgraph "Фото"
+    F1["Ринат: Онлайн-фотосессия<br/>через нейросеть"] --> F2["Убрать китайские<br/>надписи с фото"]
+  end
+
+  subgraph "Карточки МП"
+    K1["Ваня: ТЗ на карточки"] --> K2["Ринат: Проверка ТЗ"]
+    K2 --> K3["Дизайнер: Инфографика<br/>3-5 дней"]
+    K3 --> K4["Ринат: Финальная проверка"]
+  end
+
+  subgraph "Запуск"
+    L1["Менеджеры МП:<br/>Создание карточек<br/>WB / Ozon / ЯМ"] --> L2["Загрузка контента"]
+    L2 --> L3["Настройка цены"]
+    L3 --> L4["Запуск продаж"]
+    L4 --> L5["Контроль первых<br/>продаж и отзывов"]
+  end
+
+  IN1 --> I1
+  IN1 --> F1
+  IN2 --> I1
+  IN3 --> K1
+  F2 --> K1
+  DONE1 --> L1
+  K4 --> L1
+
+  style L4 fill:#d5e8d4,stroke:#82b366
+</div>
+</div>
+
+<!-- 07 БП5 -->
+<div class="diagram-wrap" id="d07">
+<h2>БП5: Продажи и маркетплейсы</h2>
+<div class="owner">Владелец: Илья Беликов</div>
+<div class="warn">ПРОБЕЛ: нет формализованного регламента работы менеджера МП и KPI. Требуется описание от Ильи.</div>
+
+<div class="section-title">Каналы продаж и ответственные</div>
+<div class="mermaid">
+graph LR
+  subgraph "Активные каналы"
+    WB["<b>Wildberries</b><br/>Ваня Скрябин"]
+    OZ["<b>Ozon</b><br/>Кирилл"]
+    YM["<b>Яндекс Маркет</b><br/>Алёна"]
+    SITE["<b>Сайт VollWerk</b>"]
+    MV["<b>МВидео</b><br/>через ИП-селлера"]
+    SBER["<b>СберМегаМаркет</b>"]
+  end
+  subgraph "Не запущен"
+    AV["Авито<br/>нужен орг. созвон"]
+  end
+  style WB fill:#d5e8d4,stroke:#82b366
+  style OZ fill:#d5e8d4,stroke:#82b366
+  style YM fill:#d5e8d4,stroke:#82b366
+  style AV fill:#f5f5f5,stroke:#ccc,color:#999
+</div>
+
+<div class="section-title">Ежедневный цикл менеджера МП</div>
+<div class="mermaid">
+graph LR
+  S(("Старт")) --> M1["Мониторинг<br/>остатков"]
+  M1 --> M2["Управление<br/>ценами и акциями"]
+  M2 --> M3["Ответы на вопросы<br/>покупателей"]
+  M3 --> M4["Работа с отзывами<br/>совм. с Любой"]
+  M4 --> M5["Контроль рекламных<br/>кампаний"]
+  M5 --> M6["Подготовка<br/>отчёта"]
+  M6 --> E(("Конец"))
+</div>
+
+<div class="section-title">Источники трафика</div>
+<div class="mermaid">
+graph LR
+  subgraph "Активные"
+    T1["Внутренняя реклама МП"]
+    T2["Сайт"]
+    T3["Блогеры<br/>Ваня Скрябин"]
+    T4["ВК группа<br/>ведут СММ"]
+    T5["Дзен<br/>ведут СММ"]
+  end
+  subgraph "Не ведутся (нет ресурса)"
+    T6["ТГ канал"]
+    T7["Инстаграм"]
+    T8["Ютуб"]
+  end
+  style T6 fill:#f5f5f5,stroke:#ccc,color:#999
+  style T7 fill:#f5f5f5,stroke:#ccc,color:#999
+  style T8 fill:#f5f5f5,stroke:#ccc,color:#999
+</div>
+</div>
+
+<!-- 08 БП6 -->
+<div class="diagram-wrap" id="d08">
+<h2>БП6: Тех поддержка и работа с клиентами</h2>
+<div class="owner">Владелец: Рома</div>
+<div class="warn">ПРОБЕЛ: нет SLA на ответы, нет системы тикетов, нет отчётности по обращениям.</div>
+
+<div class="mermaid">
+graph TD
+  subgraph "Входящие обращения"
+    IN1["Телефон +<br/>мессенджеры"] --> MISHA["<b>Миша</b><br/>Работа с клиентами"]
+    IN2["Отзывы и вопросы<br/>на МП"] --> LUBA["<b>Люба</b><br/>Отзывы на МП"]
+    IN3["Гарантийные<br/>обращения"] --> SASHA["<b>Саша</b><br/>Тех. специалист"]
+  end
+
+  MISHA --> DEC1{"Тип обращения"}
+  DEC1 -->|Консультация| A1["Ответ клиенту"]
+  DEC1 -->|Возврат| A2["Оформление возврата"]
+  DEC1 -->|Ремонт| SASHA
+
+  LUBA --> A3["Ответ на отзыв"]
+  LUBA --> A4["Ответ на вопрос"]
+  LUBA --> FB["Сбор обратной связи"]
+
+  SASHA --> DEC2{"Ремонт или замена?"}
+  DEC2 -->|Ремонт| A5["Выполнение ремонта"]
+  DEC2 -->|Замена| A6["Замена товара"]
+  A5 --> A7["Возврат клиенту"]
+
+  FB --> RINAT["<b>Ринат</b>: Анализ →<br/>доработка товара<br/>→ обратно в БП1"]
+
+  MISHA -.->|эскалация| ROMA["<b>Рома</b><br/>Нестандартные ситуации"]
+  LUBA -.->|эскалация| ROMA
+  SASHA -.->|эскалация| ROMA
+
+  style DEC1 fill:#fff2cc,stroke:#d6b656
+  style DEC2 fill:#fff2cc,stroke:#d6b656
+  style ROMA fill:#dae8fc,stroke:#6c8ebf
+</div>
+</div>
+
+<!-- 09 БП7 -->
+<div class="diagram-wrap" id="d09">
+<h2>БП7: Финансовая управленка</h2>
+<div class="owner">Владелец: Галя · 66 листов Google Sheets · 8710+ записей</div>
+<div class="warn">ПРОБЛЕМЫ: Финплан без разбивки по юрлицам · Ручной ввод Income (нужно API МП) · Все 66 листов зависят от одного человека (Галя)</div>
+
+<div class="section-title">Ежедневный процесс (Галя)</div>
+<div class="mermaid">
+graph LR
+  D1["Открыть банковские<br/>выписки"] --> D2["Внести ВСЕ транзакции<br/>в журнал Операции"]
+  D2 --> D3["Заполнить: Дата, Сумма,<br/>Счёт, Статья ДДС,<br/>Компания, Проект"]
+  D3 --> DEC{"Перемещение<br/>между счетами?"}
+  DEC -->|Да| D4["Две строки:<br/>расход + приход<br/>Проверка = 0"]
+  DEC -->|Нет| D5["Одна строка"]
+  D4 --> D6["Данные автоматически<br/>в Income, Costs,<br/>Распр. финансов"]
+  D5 --> D6
+  style DEC fill:#fff2cc,stroke:#d6b656
+</div>
+
+<div class="section-title">Еженедельный процесс (Галя)</div>
+<div class="mermaid">
+graph LR
+  W1["Заполнить Income<br/>по каждому МП"] --> W2["Обновить себес R00X<br/>FIFO по заказам"]
+  W2 --> W3["Проверить Payment<br/>Calculation P&L"]
+  W3 --> W4["Обновить Finance Plan<br/>факт + прогноз"]
+  W4 --> W5["Прогнать 11<br/>проверочных листов"]
+  W5 --> DEC{"Все = 0<br/>или TRUE?"}
+  DEC -->|Нет| W6["Найти ошибку<br/>в Операциях"]
+  DEC -->|Да| W7["Готово"]
+  W6 --> W5
+  style DEC fill:#fff2cc,stroke:#d6b656
+  style W7 fill:#d5e8d4,stroke:#82b366
+</div>
+
+<div class="section-title">Потоки данных между 66 листами</div>
+<div class="mermaid">
+graph TD
+  REF["<b>СПРАВОЧНИКИ</b><br/>34 кошелька, 62 статьи ДДС,<br/>28+ заказов, 5 проектов"] --> OPS
+
+  OPS["<b>ОПЕРАЦИИ</b><br/>Центральный журнал<br/>8710+ записей"]
+
+  OPS --> INC["<b>Income</b><br/>3 листа<br/>Поступления с МП"]
+  OPS --> COSTS["<b>Costs</b><br/>2 листа<br/>Расходы по статьям"]
+  OPS --> PURCH["<b>Purchasing</b><br/>11 листов<br/>Себестоимость"]
+  OPS --> FINA["<b>Распр. финансов</b><br/>Остатки 34 счетов"]
+
+  PURCH --> SEBES["<b>себес R001-R0033</b><br/>6 листов<br/>FIFO по заказам"]
+
+  INC --> PL["<b>PAYMENT CALCULATION</b><br/>10 листов · Сводный P&L"]
+  COSTS --> PL
+  SEBES --> PL
+  FINA --> PL
+
+  PL --> FP["<b>Finance Plan</b><br/>5 листов"]
+  PL --> ENJ["<b>Summary for Enjoy</b><br/>Отчёт партнёру"]
+  PL --> DIV["<b>Дивиденды</b><br/>Расчёт долей"]
+
+  OPS --> CHECK["<b>11 ПРОВЕРОЧНЫХ ЛИСТОВ</b><br/>Перекрёстная сверка"]
+
+  style REF fill:#dae8fc,stroke:#6c8ebf
+  style OPS fill:#d5e8d4,stroke:#82b366
+  style PL fill:#fff2cc,stroke:#d6b656
+  style CHECK fill:#f8cecc,stroke:#b85450
+</div>
+</div>
+
+<!-- 10 БП8 -->
+<div class="diagram-wrap" id="d10">
+<h2>БП8: ВЭД — воронка продаж</h2>
+<div class="owner">Владелец: Иван Синчук</div>
+<div class="warn">ПРОБЕЛЫ: нет CRM-процесса · нет данных о конверсиях воронок · нет процесса пост-продажного сопровождения</div>
+
+<div class="section-title">Продукты</div>
+<div class="mermaid">
+graph LR
+  P1["Платная<br/>консультация"] ~~~ P2["Платный<br/>вебинар"] ~~~ P3["Курс<br/>Белый Импорт с 0"] ~~~ P4["Сопровождение<br/>импорта"]
+  style P1 fill:#d5e8d4,stroke:#82b366
+  style P2 fill:#d5e8d4,stroke:#82b366
+  style P3 fill:#dae8fc,stroke:#6c8ebf
+  style P4 fill:#dae8fc,stroke:#6c8ebf
+</div>
+
+<div class="section-title">Воронка 1: Вебинарная</div>
+<div class="mermaid">
+graph LR
+  T1["Ирина: Рилсы"] --> BOT["Ссылка на бота"]
+  T2["Анастасия: Инвайт"] --> BOT
+  T3["Партнёрка"] --> BOT
+  BOT --> REG["Регистрация"]
+  REG --> WARM["Догрев в боте"]
+  WARM --> GC["Цепочка<br/>на GetCourse"]
+  GC --> WEB["Синчук + Попов:<br/>Проведение вебинара"]
+  WEB --> ART["Артём: Обработка<br/>заявок"]
+  ART --> DEAL["Закрытие сделки"]
+
+  style DEAL fill:#d5e8d4,stroke:#82b366
+</div>
+
+<div class="section-title">Воронка 2: Консультационная</div>
+<div class="mermaid">
+graph LR
+  T1["Ирина: Рилсы"] --> LINK["Ссылка на<br/>Ивана Синчука"]
+  T2["Анастасия: Инвайт"] --> LINK
+  LINK --> CONS["Синчук:<br/>Консультация"]
+  CONS --> ART["Артём: Дожим"]
+  ART --> SALE["Продажа курса /<br/>сопровождения"]
+
+  style SALE fill:#d5e8d4,stroke:#82b366
+</div>
+
+<table class="info-table">
+<tr><th>Этап</th><th>Ответственный</th><th>Действие</th></tr>
+<tr><td>Трафик (рилсы)</td><td>Ирина Мурадова</td><td>Создание контента</td></tr>
+<tr><td>Инвайт</td><td>Анастасия Ерлих</td><td>Приглашение ЦА</td></tr>
+<tr><td>Консультации</td><td>Иван Синчук</td><td>Продажа через экспертность</td></tr>
+<tr><td>Вебинары</td><td>Синчук + Попов</td><td>Контент + продукт</td></tr>
+<tr><td>Операционка</td><td>Дарья Любченкова</td><td>Координация процессов</td></tr>
+<tr><td>Продажи</td><td>Артём Кожевников</td><td>Обработка заявок, дожим</td></tr>
+</table>
+</div>
+
 </div>
 
 <script>
-const fileMap = {
-  '01': '01_%D0%9E%D1%80%D0%B3%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0.svg',
-  '02': '02_%D0%9A%D0%B0%D1%80%D1%82%D0%B0_%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81%D0%BE%D0%B2.svg',
-  '03': '03_%D0%91%D0%9F1_%D0%9E%D1%82%D0%B1%D0%BE%D1%80_%D0%B8_%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA_%D1%82%D0%BE%D0%B2%D0%B0%D1%80%D0%B0.svg',
-  '04': '04_%D0%91%D0%9F2_%D0%A1%D0%B5%D1%80%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F.svg',
-  '05': '05_%D0%91%D0%9F3_%D0%9B%D0%BE%D0%B3%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0.svg',
-  '06': '06_%D0%91%D0%9F4_%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D1%82_%D0%B8_%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D0%B8.svg',
-  '07': '07_%D0%91%D0%9F5_%D0%9F%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B8.svg',
-  '08': '08_%D0%91%D0%9F6_%D0%A2%D0%B5%D1%85_%D0%BF%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%BA%D0%B0.svg',
-  '09': '09_%D0%91%D0%9F7_%D0%A4%D0%B8%D0%BD_%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%BA%D0%B0.svg',
-  '10': '10_%D0%91%D0%9F8_%D0%92%D0%AD%D0%94_%D0%B2%D0%BE%D1%80%D0%BE%D0%BD%D0%BA%D0%B0.svg'
-};
+mermaid.initialize({ 
+  startOnLoad: true, 
+  theme: 'default',
+  flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+  securityLevel: 'loose'
+});
 
-let scale = 1;
-const img = document.getElementById('diagram');
-
-function show(el, id) {
+function show(id, el) {
+  document.querySelectorAll('.diagram-wrap').forEach(d => d.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
   el.classList.add('active');
-  const file = fileMap[id];
-  if (file) {
-    img.src = file;
-    img.style.display = 'block';
-    scale = 1;
-    img.style.transform = `scale(${scale})`;
-  }
+  window.scrollTo(0, 0);
 }
-
-function zoom(delta) {
-  scale = Math.max(0.2, Math.min(5, scale + delta));
-  img.style.transform = `scale(${scale})`;
-  img.style.transformOrigin = 'top left';
-}
-
-function resetZoom() {
-  scale = 1;
-  img.style.transform = `scale(1)`;
-}
-
-// Load first diagram
-window.onload = () => { img.src = fileMap['01']; };
-
-// Scroll zoom
-document.getElementById('viewer').addEventListener('wheel', (e) => {
-  if (e.ctrlKey || e.metaKey) {
-    e.preventDefault();
-    zoom(e.deltaY > 0 ? -0.1 : 0.1);
-  }
-}, { passive: false });
 </script>
-
 </body>
 </html>
