@@ -68,29 +68,31 @@ org:{t:'Оргструктура',s:'Структура по проектам',s
 CEO[Директор\nИван Синчук] --> FIN[Фин служба\nГаля + Маша]
 CEO --> JUR[Юрист\nВАКАНТ]
 CEO --> BUH[Бухгалтерия\nОльга]
+CEO --> MKT[Маркетинг]
 CEO --> PROJ[Проекты]
 JUR --> PROJ
 FIN -.-> PROJ
+BUH -.-> PROJ
 style CEO fill:#1a1a2e,color:#fff
 style FIN fill:#fff2cc,stroke:#d6b656
 style JUR fill:#fff2cc,stroke:#d6b656
-style BUH fill:#fff2cc,stroke:#d6b656`},
+style BUH fill:#fff2cc,stroke:#d6b656
+style MKT fill:#fff2cc,stroke:#d6b656`},
 {h:'Проекты компании',m:`flowchart TD
 PROJ[Проекты] --> VW[VollWerk]
+PROJ --> IKO_P[ИКО]
 PROJ --> VED_P[ВЭД]
 PROJ --> FBS[FBS China]
 PROJ --> KK[Китай Кредит]
-PROJ --> IMP[Импорт Чина]
 VW --> TIK[Тикосум]
 VW --> OTP[Отпариватели]
 VW --> PZU[ПЗУ]
 VW --> ROB[Роботы]
-VW --> IKO[ИКО\nпылесосы]
 style VW fill:#e6194b,color:#fff
+style IKO_P fill:#42d4f4,color:#000
 style VED_P fill:#3cb44b,color:#fff
 style FBS fill:#4363d8,color:#fff
-style KK fill:#f58231,color:#fff
-style IMP fill:#911eb4,color:#fff`},
+style KK fill:#f58231,color:#fff`},
 {h:'Команды по проектам',m:`flowchart TD
 subgraph VW_TEAM[VollWerk]
   direction TD
@@ -104,7 +106,6 @@ subgraph VW_TEAM[VollWerk]
   TP --> TM[Миша клиенты]
   TP --> TL[Люба отзывы]
   TP --> TS[Саша ремонт]
-  MKT[Маркетинг\nIhelper СММ]
 end
 subgraph VED_TEAM[ВЭД]
   direction TD
@@ -127,22 +128,31 @@ overview:{t:'Обзор системы',s:'Структура бизнеса И�
 {h:'Структура управления',m:`flowchart TD
 DIR[Директор\nИван Синчук] --> FIN_S[Фин служба\nГаля]
 DIR --> JUR_S[Юрист\nВАКАНТ]
+DIR --> BUH_S[Бухгалтерия\nОльга]
+DIR --> MKT_S[Маркетинг]
 DIR --> PROJ[Проекты]
 JUR_S --> PROJ
 FIN_S -.-> PROJ
+BUH_S -.-> PROJ
 PROJ --> VW[VollWerk]
+PROJ --> IKO_OV[ИКО]
 PROJ --> VED_P[ВЭД]
-PROJ --> OTHER[и т/д]
+PROJ --> FBS_OV[FBS China]
+PROJ --> KK_OV[Китай Кредит]
 VW --> TIK[Тикосум]
 VW --> OTP[Отпариватели]
 VW --> PZU[ПЗУ]
 VW --> ROB[Роботы]
-VW --> IKO2[ИКО\nпылесосы]
 style DIR fill:#1a1a2e,color:#fff
 style VW fill:#e6194b,color:#fff
+style IKO_OV fill:#42d4f4
 style VED_P fill:#3cb44b,color:#fff
+style FBS_OV fill:#4363d8,color:#fff
+style KK_OV fill:#f58231,color:#fff
 style FIN_S fill:#fff2cc,stroke:#d6b656
-style JUR_S fill:#fff2cc,stroke:#d6b656`},
+style JUR_S fill:#fff2cc,stroke:#d6b656
+style BUH_S fill:#fff2cc,stroke:#d6b656
+style MKT_S fill:#fff2cc,stroke:#d6b656`},
 {h:'VollWerk: жизненный цикл товара',m:`flowchart LR
 FIND[Поиск] --> FAB[Переговоры\nс фабрикой] --> TEST[Тест] --> MAKE[Производство] --> CERT[Сертификация] --> SHIP[Доставка] --> CONT[Контент] --> SELL[Продажи] --> SUPP[Тех.поддержка]
 SUPP -.->|обратная связь| FIND
