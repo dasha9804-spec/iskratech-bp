@@ -8,15 +8,13 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0d1117;color:#c9d1d9;display:flex;height:100vh;overflow:hidden}
-.sidebar{width:250px;min-width:250px;background:#161b22;border-right:1px solid #21262d;overflow-y:auto;padding:16px 0;display:flex;flex-direction:column}
+.sidebar{width:240px;min-width:240px;background:#161b22;border-right:1px solid #21262d;overflow-y:auto;padding:16px 0;display:flex;flex-direction:column}
 .sidebar h1{font-size:16px;color:#f0f6fc;padding:0 14px 10px;border-bottom:1px solid #21262d}
 .updated{font-size:10px;color:#484f58;padding:4px 14px 8px}
-.nav-item{display:block;padding:8px 14px;cursor:pointer;border-left:3px solid transparent;transition:all .12s;text-decoration:none;color:inherit}
+.nav-group{font-size:10px;color:#484f58;font-weight:700;letter-spacing:1px;padding:12px 14px 4px;text-transform:uppercase}
+.nav-item{display:block;padding:6px 14px 6px 20px;cursor:pointer;border-left:3px solid transparent;transition:all .12s;text-decoration:none;color:#c9d1d9;font-size:12px}
 .nav-item:hover{background:#1c2333}
-.nav-item.active{background:#1c2333;border-left-color:#58a6ff}
-.nav-item .num{font-size:9px;color:#484f58;font-weight:700;letter-spacing:1px}
-.nav-item .name{font-size:12px;color:#c9d1d9;margin-top:1px}
-.nav-item.active .name{color:#58a6ff}
+.nav-item.active{background:#1c2333;border-left-color:#58a6ff;color:#58a6ff}
 .gap-box{margin:10px;padding:10px 12px;background:#f8514915;border:1px solid #f8514933;border-radius:6px}
 .gap-box h3{color:#f85149;font-size:11px;margin-bottom:3px}
 .gap-box li{font-size:10px;color:#c9d1d9;margin:1px 0 1px 12px}
@@ -27,40 +25,47 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .warn{background:#f8514922;border:1px solid #f8514944;border-radius:4px;padding:8px 12px;margin-top:8px;color:#f85149;font-size:12px}
 .content{padding:16px 24px 40px}
 .section{margin-bottom:24px}
-.section h3{color:#58a6ff;font-size:14px;font-weight:600;margin-bottom:8px;padding-left:4px}
-.diagram-box{background:#ffffff;border-radius:8px;padding:24px;overflow-x:auto;overflow-y:visible;border:1px solid #30363d}
-.diagram-box .mermaid{min-width:fit-content}
+.section h3{color:#58a6ff;font-size:14px;font-weight:600;margin-bottom:8px}
+.diagram-box{background:#fff;border-radius:8px;padding:24px;overflow-x:auto;border:1px solid #30363d}
 .diagram-box .mermaid svg{display:block;margin:0 auto;max-width:none!important}
 .info-table{border-collapse:collapse;width:100%;margin:8px 0 16px}
 .info-table th{background:#161b22;color:#8b949e;text-align:left;padding:8px 12px;font-size:11px;font-weight:600;border:1px solid #21262d}
 .info-table td{padding:8px 12px;font-size:12px;border:1px solid #21262d}
-.zoom-hint{font-size:10px;color:#484f58;text-align:right;margin-top:4px;padding-right:4px}
+.note{font-size:12px;color:#8b949e;margin:4px 0 16px;padding-left:4px}
 </style>
 </head>
 <body>
 <div class="sidebar">
   <h1>ИскраТех</h1>
-  <div class="updated">20 сентября 2026</div>
-  <a class="nav-item active" onclick="go('p01',this)"><div class="num">01</div><div class="name">Оргструктура</div></a>
-  <a class="nav-item" onclick="go('p02',this)"><div class="num">02</div><div class="name">Карта процессов</div></a>
-  <a class="nav-item" onclick="go('p03',this)"><div class="num">03</div><div class="name">БП1: Запуск товара</div></a>
-  <a class="nav-item" onclick="go('p04',this)"><div class="num">04</div><div class="name">БП2: Сертификация</div></a>
-  <a class="nav-item" onclick="go('p05',this)"><div class="num">05</div><div class="name">БП3: Логистика</div></a>
-  <a class="nav-item" onclick="go('p06',this)"><div class="num">06</div><div class="name">БП4: Контент</div></a>
-  <a class="nav-item" onclick="go('p07',this)"><div class="num">07</div><div class="name">БП5: Продажи</div></a>
-  <a class="nav-item" onclick="go('p08',this)"><div class="num">08</div><div class="name">БП6: Тех поддержка</div></a>
-  <a class="nav-item" onclick="go('p09',this)"><div class="num">09</div><div class="name">БП7: Фин управленка</div></a>
-  <a class="nav-item" onclick="go('p10',this)"><div class="num">10</div><div class="name">БП8: ВЭД воронка</div></a>
+  <div class="updated">сентябрь 2026</div>
+  <div class="nav-group">Структура</div>
+  <a class="nav-item active" onclick="go('org',this)">Оргструктура</a>
+  <a class="nav-item" onclick="go('overview',this)">Обзор системы</a>
+  <div class="nav-group">VollWerk: жизненный цикл товара</div>
+  <a class="nav-item" onclick="go('lc',this)">Сквозной процесс</a>
+  <a class="nav-item" onclick="go('lc_find',this)">1. Поиск и отбор</a>
+  <a class="nav-item" onclick="go('lc_test',this)">2. Образец и тест</a>
+  <a class="nav-item" onclick="go('lc_prod',this)">3. Производство</a>
+  <a class="nav-item" onclick="go('lc_cert',this)">4. Сертификация</a>
+  <a class="nav-item" onclick="go('lc_ship',this)">5. Доставка</a>
+  <a class="nav-item" onclick="go('lc_content',this)">6. Контент</a>
+  <a class="nav-item" onclick="go('lc_sell',this)">7. Продажи</a>
+  <a class="nav-item" onclick="go('lc_support',this)">8. Пост-продажа</a>
+  <div class="nav-group">Операционные циклы</div>
+  <a class="nav-item" onclick="go('ops_fin',this)">Финансы: день/неделя</a>
+  <a class="nav-item" onclick="go('ops_data',this)">Финансы: 66 листов</a>
+  <div class="nav-group">Отдельный бизнес</div>
+  <a class="nav-item" onclick="go('ved',this)">ВЭД воронка</a>
   <div style="flex:1"></div>
   <div class="gap-box"><h3>Пробелы</h3><ul>
-    <li>БП5: нет регламента</li><li>БП6: нет SLA</li><li>БП7: нет разбивки по юрлицам</li><li>БП8: нет CRM</li><li>FBS China — не описан</li>
+    <li>Нет регламента менеджера МП</li><li>Нет SLA тех.поддержки</li><li>Финплан без юрлиц</li><li>ВЭД: нет CRM</li><li>FBS China не описан</li>
   </ul></div>
 </div>
 <div class="main" id="root"></div>
 <script>
-const D = {
-p01:{t:'Оргструктура',s:'5 направлений · 8 отделов · ~20 человек',sections:[
-{h:'Структура компании',m:`flowchart TD
+const P={
+org:{t:'Оргструктура',s:'5 направлений · 8 отделов · ~20 человек',sec:[
+{h:'Компания',m:`flowchart TD
 CEO[Иван Синчук\nГендиректор]
 CEO --> VW[VollWerk\nE-commerce]
 CEO --> FBS[FBS China]
@@ -72,228 +77,315 @@ VW --> PROD[Отдел продукта\nРинат]
 VW --> FIN[Фин отдел\nГаля]
 VW --> LOG[Логистика\nВаня Попов]
 VW --> TP[Тех поддержка\nРома]
-VW --> BUH[Бухгалтерия\nОльга]
-VW --> JUR[Юр отдел\nНаташа]
-VW --> MKT[Маркетинг\nIhelper]
-OP --> WB[Ваня Скрябин\nWB]
-OP --> OZ[Кирилл\nOzon]
-OP --> YM[Алёна\nЯМ]
+VW --> BUH[Бухгалтерия Ольга]
+VW --> JUR[Юристы Наташа]
+VW --> MKT[Маркетинг Ihelper]
+OP --> WB[Ваня WB]
+OP --> OZ[Кирилл Ozon]
+OP --> YM[Алёна ЯМ]
 PROD --> DZ[Дизайнер]
 PROD --> PV[Ваня пом.]
 FIN --> FM[Маша]
 LOG --> LO[Оксана]
-TP --> TM[Миша\nклиенты]
-TP --> TL[Люба\nотзывы]
-TP --> TS[Саша\nремонт]
-VED --> V1[Иван Попов]
-VED --> V2[Дарья Любченкова]
-VED --> V3[Артём Кожевников]
-VED --> V4[Ирина Мурадова]
-VED --> V5[Анастасия Ерлих]
-FBS --> F1[Лёша\nКитай]
+TP --> TM[Миша клиенты]
+TP --> TL[Люба отзывы]
+TP --> TS[Саша ремонт]
+VED --> V1[Попов продукт]
+VED --> V2[Дарья опер.рук]
+VED --> V3[Артём продажи]
+VED --> V4[Ирина СММ]
+VED --> V5[Настя помощник]
+FBS --> F1[Лёша Китай]
 FBS --> F2[Mr Zhang]
 style CEO fill:#1a1a2e,color:#fff
 style VW fill:#e6194b,color:#fff
 style FBS fill:#4363d8,color:#fff
 style KK fill:#f58231,color:#fff
 style VED fill:#3cb44b,color:#fff
-style IMP fill:#911eb4,color:#fff`}
+style IMP fill:#911eb4,color:#fff`}]},
+
+overview:{t:'Обзор системы',s:'Как всё связано',sec:[
+{h:'Два бизнеса ИскраТех',m:`flowchart LR
+subgraph VollWerk[VollWerk — товарный бизнес]
+  direction LR
+  FIND[Поиск] --> TEST[Тест] --> MAKE[Производство] --> CERT[Сертификация] --> SHIP[Доставка] --> CONT[Контент] --> SELL[Продажи] --> SUPP[Поддержка]
+  SUPP -.->|обратная связь| FIND
+end
+subgraph VED_BIZ[ВЭД — образовательный бизнес]
+  direction LR
+  TRAF[Трафик] --> FUNNEL[Воронка] --> SALE[Продажа] --> DELIVER[Сопровождение]
+end
+subgraph FIN_LAYER[Финансы — сквозной слой]
+  direction LR
+  UE[Юнит-экономика] --> PURCH[Закупки CNY] --> COSTS[Расходы] --> PL[P&L] --> FPLAN[Финплан]
+end
+VollWerk --> FIN_LAYER
+VED_BIZ --> FIN_LAYER
+style VollWerk fill:#1a1a2e11,stroke:#e6194b
+style VED_BIZ fill:#1a1a2e11,stroke:#3cb44b
+style FIN_LAYER fill:#fff2cc33,stroke:#d6b656`},
+{h:'Кто за что отвечает (сквозной процесс)',m:`flowchart LR
+subgraph Поиск_и_тест
+  A1[Илья\nаналитика]
+  A2[Ринат\nтех.оценка]
+  A3[Лёша\nтест в Китае]
+end
+subgraph Производство_и_серт
+  B1[Ринат\nвизуал коробка\nинструкция]
+  B2[Дизайнер\nкоробка стикер\nинфографика]
+  B3[Оксана\nсертификация\nдокументы]
+end
+subgraph Доставка
+  C1[Оксана\nэкспедитор таможня]
+  C2[Лёша\nконтроль фабрика]
+  C3[Ваня Попов\nприёмка склад]
+end
+subgraph Продажи
+  D1[Ваня WB]
+  D2[Кирилл Ozon]
+  D3[Алёна ЯМ]
+end
+subgraph Поддержка
+  E1[Миша клиенты]
+  E2[Люба отзывы]
+  E3[Саша ремонт]
+end
+Поиск_и_тест --> Производство_и_серт --> Доставка --> Продажи --> Поддержка`}
+],tbl:{h:['Этап','Владелец','Финансовая точка','Решение'],r:[
+['Поиск','Илья+Ринат','Предварит. юнит-экономика','Запускаем / нет / доработать'],
+['Тест образца','Ринат+Лёша','—','Качество ОК / нет'],
+['Производство','Ринат','Финальная юнит-экономика','Запуск партии / стоп'],
+['Сертификация','Оксана','Стоимость серт. + логистики','Опционально: нужна / нет'],
+['Доставка','Ваня Попов','ЕЛС: сбор+пошлина+НДС','—'],
+['Контент','Ринат','—','—'],
+['Продажи','Илья','Income → Payment Calc → P&L','Корректировка цен'],
+['Поддержка','Рома','—','Доработка товара → новый цикл']
+]}},
+
+lc:{t:'Жизненный цикл товара',s:'VollWerk: сквозной процесс от идеи до клиента',w:'Цикл: 2-4 недели привязан к производству фабрики. Критический путь: визуал (нед 1) → макеты (нед 3)',sec:[
+{h:'Полный жизненный цикл',m:`flowchart TD
+START((Идея)) --> ANAL[Илья: аналитика МП]
+ANAL --> TECH[Ринат: тех.оценка]
+TECH --> ECON1[Галя: предварит.\nюнит-экономика]
+ECON1 --> D1{Запускаем?}
+D1 -->|Нет| STOP1[Стоп]
+D1 -->|Да| SAMPLE[Запрос образца]
+SAMPLE --> TEST_CN[Лёша: тест в Китае\nфото видео по ТЗ]
+TEST_CN --> D2{Качество?}
+D2 -->|Нет| STOP2[Отказ]
+D2 -->|Да| ECON2[Галя: финальная\nюнит-экономика]
+ECON2 --> D3{Экономика\nсходится?}
+D3 -->|Нет| STOP3[Стоп-процесс]
+D3 -->|Да| PROD[Заказ производства\n4 недели фабрика]
+PROD --> VISUAL[Ринат: визуал\nлоготип цвет рендеры]
+PROD --> CHARS[Ринат+Илья:\nхарактеристики]
+VISUAL --> BOX[Дизайнер: коробка\n5 дн + стикер 1 дн]
+CHARS --> INSTR[Ринат: инструкция\n3-7 дн]
+INSTR --> OX_CHECK[Оксана: проверка\nформулировок]
+BOX --> READY_PRINT[Макеты на фабрику\nдедлайн: неделя 3]
+OX_CHECK --> D4{Нужна серт-ция?}
+D4 -->|Да| CERT[Оксана: сертификация\n1 нед — неск. мес]
+D4 -->|Нет| SHIP_PREP
+CERT --> SHIP_PREP[Оксана: подготовка\nдоков на отправку]
+SHIP_PREP --> SHIP_CN[Лёша: контроль\nна фабрике]
+SHIP_CN --> EXPED[Экспедитор:\nзабор и доставка]
+EXPED --> CUSTOMS[Брокер: растаможка\nОксана: ЕЛС]
+CUSTOMS --> RECEIVE[Ваня Попов:\nприёмка на складе]
+RECEIVE --> CONTENT[Ринат: фото нейросеть\n+ ТЗ на карточки]
+CONTENT --> DESIGN[Дизайнер:\nинфографика 3-5 дн]
+DESIGN --> CARDS[ОП: создание\nкарточек на МП]
+CARDS --> LAUNCH[Запуск продаж]
+LAUNCH --> MONITOR[Контроль продаж\nи отзывов]
+MONITOR --> FEEDBACK[Сбор обратной\nсвязи]
+FEEDBACK -.->|доработка| START
+style D1 fill:#fff2cc
+style D2 fill:#fff2cc
+style D3 fill:#fff2cc
+style D4 fill:#fff2cc
+style STOP1 fill:#f8cecc
+style STOP2 fill:#f8cecc
+style STOP3 fill:#f8cecc
+style LAUNCH fill:#d5e8d4
+style READY_PRINT fill:#f8cecc,stroke:#b85450,stroke-width:3px`}
 ]},
 
-p02:{t:'Карта процессов',s:'Управляющие → Основные → Поддерживающие',sections:[
-{h:'Цепочка создания ценности',m:`flowchart LR
-BP1[БП1 Отбор\nРинат+Илья] --> D1{Серт-ция?}
-D1 -->|Да| BP2[БП2 Сертификация\nОксана]
-D1 -->|Нет| BP3
-BP2 --> BP3[БП3 Логистика\nВаня Попов]
-BP3 --> BP4[БП4 Контент\nРинат]
-BP4 --> BP5[БП5 Продажи\nИлья]
-BP5 --> BP6[БП6 Тех.подд\nРома]
-BP5 -.->|новый товар| BP1
-style BP1 fill:#d5e8d4,stroke:#82b366
-style BP2 fill:#d5e8d4,stroke:#82b366,stroke-dasharray:5
-style BP3 fill:#d5e8d4,stroke:#82b366
-style BP4 fill:#d5e8d4,stroke:#82b366
-style BP5 fill:#d5e8d4,stroke:#82b366
-style BP6 fill:#d5e8d4,stroke:#82b366`},
-{h:'Управляющие',m:`flowchart LR
-A[Стратегия\nСинчук] --- B[БП7 Управленка\nГаля] --- C[Риски\nСинчук]
-style A fill:#dae8fc,stroke:#6c8ebf
-style B fill:#dae8fc,stroke:#6c8ebf
-style C fill:#dae8fc,stroke:#6c8ebf`},
-{h:'Поддерживающие',m:`flowchart LR
-A[Бухгалтерия] --- B[Юристы] --- C[HR] --- D[IT]
-style A fill:#fff2cc,stroke:#d6b656
-style B fill:#fff2cc,stroke:#d6b656
-style C fill:#fff2cc,stroke:#d6b656
-style D fill:#fff2cc,stroke:#d6b656`}
-]},
-
-p03:{t:'БП1: Отбор и запуск товара',s:'Ринат + Илья · 2–4 недели',w:'Критический путь: визуал (нед 1) → макеты (нед 3)',sections:[
-{h:'Фаза 1: Воронка — решение о запуске',m:`flowchart TD
-A[Илья: аналитика\nМП-стат] --> B[Анализ конкурентов]
-B --> C[Анализ отзывов]
-R[Ринат: тех.оценка] --> R2[Доп. аксессуары]
-C --> F[Оксана: расчёт логистики]
+lc_find:{t:'1. Поиск и отбор товара',s:'Илья + Ринат · 2-5 дней',sec:[
+{h:'Процесс отбора',m:`flowchart TD
+A[Илья: аналитика МП-стат\nспрос конкуренция объём] --> B[Илья: анализ конкурентов\nцены карточки отзывы]
+B --> C[Илья: анализ отзывов\nболи клиентов]
+R[Ринат: тех.оценка\nхарактеристики доработки] --> R2[Ринат: доп.аксессуары\nкомплектация]
+C --> F[Оксана: предварит.\nрасчёт логистики]
 R2 --> F
-F --> G[Юнит-экономика]
-G --> D1{Запускаем?}
-D1 -->|Да| OK[Карточка товара]
-D1 -->|Нет| NO[Стоп]
+F --> G[Оксана: требования\nк сертификации и стоимость]
+G --> H[Галя: предварит.\nюнит-экономика]
+H --> D1{Ринат+Илья:\nзапускаем?}
+D1 -->|Да| OK[Карточка товара\nв системе]
+D1 -->|Нет| NO[Отклонено]
 D1 -->|Доработать| A
 style D1 fill:#fff2cc
 style OK fill:#d5e8d4
-style NO fill:#f8cecc`},
-{h:'Фаза 2: Тест образца',m:`flowchart LR
-S1[Запрос образца] --> S2[Лёша: получение]
-S2 --> S3[Лёша: тест по ТЗ]
-S3 --> S4[Результаты в РФ]
-S4 --> D{Качество?}
-D -->|ОК| GO[Запуск]
-D -->|Нет| STOP[Отказ]
-D -->|Вопросы| CALL[Созвон]
+style NO fill:#f8cecc`}
+],tbl:{h:['Кто','Что делает','Результат'],r:[
+['Илья','МП-стат: объём рынка, конкуренция, отзывы','Цифры: спрос, маржа, конкуренты'],
+['Ринат','Тех.оценка: характеристики, доработки','Понимание продукта, доп.аксессуары'],
+['Оксана','Расчёт логистики и сертификации','Стоимость доставки + серт.'],
+['Галя','Предварительная юнит-экономика','Маржинальность: ок / не ок']
+]}},
+
+lc_test:{t:'2. Образец и тест',s:'Ринат + Лёша · 3-5 дней',sec:[
+{h:'Тестирование образца',m:`flowchart LR
+S1[Ринат: запрос\nобразца] --> S2[Образец на склад\nк Лёше в Китае]
+S2 --> S3[Ринат+нейросеть:\nТЗ на тест]
+S3 --> S4[Лёша: фото-видео\nфиксация по ТЗ]
+S4 --> S5[Результаты\nв Россию]
+S5 --> D{Ринат:\nкачество?}
+D -->|ОК| GO[Запускаем]
+D -->|Вопросы| CALL[Созвон\nдоп.тест]
+D -->|Плохо| STOP[Отказ]
+CALL --> D
 style D fill:#fff2cc
 style GO fill:#d5e8d4
-style STOP fill:#f8cecc`},
-{h:'Фаза 3: Производство 4 недели',m:`flowchart LR
-subgraph Нед_1[Неделя 1]
-  V[Визуал, цвет]
-  C[Характеристики]
+style STOP fill:#f8cecc`}]},
+
+lc_prod:{t:'3. Производство',s:'4 недели на фабрике · Ринат + Дизайнер + Оксана',w:'К 3-й неделе ОБЯЗАНЫ отдать макеты коробок и инструкций',sec:[
+{h:'Параллельные потоки привязаны к фабрике',m:`flowchart TD
+subgraph Нед_1[Неделя 1: фабрика ждёт запчасти]
+  V[Ринат: визуал\nлоготип цвет рендеры]
+  C[Ринат+Илья:\nхарактеристики\nназвание артикул ШК]
 end
-subgraph Нед_2_3[Неделя 2-3]
-  B[Дизайн коробки\n5 дн]
-  ST[Стикеры 1 дн]
-  I[Инструкция\n3-7 дн]
+subgraph Нед_2[Неделя 2: фабрика собирает]
+  M[Ринат: запрос\nматериалов с фабрики]
+  I[Ринат: инструкция\nперевод ChatGPT\nдоработка картинки]
 end
-subgraph Серт[Параллельно]
-  CERT[Сертификация]
+subgraph Нед_3[Неделя 3: ДЕДЛАЙН макетов]
+  B[Дизайнер: коробка 5дн]
+  ST[Дизайнер: стикеры 1дн]
+  OX[Оксана: согласование\nформулировок с СО]
+  SEND[Отправить макеты\nна фабрику]
+end
+subgraph Нед_4[Неделя 4: сборка + упаковка]
+  QC[Лёша: контроль\nкачества]
 end
 V --> B
 C --> B
-B --> ST
 C --> I
-I --> CERT
-style CERT stroke-dasharray:5`},
-{h:'Фаза 4: Контент и запуск',m:`flowchart LR
-F[Фото нейросеть] --> TZ[ТЗ карточки]
-TZ --> INF[Инфографика]
-INF --> CR[Карточки на МП]
-CR --> PR[Настройка цен]
-PR --> GO[Запуск]
-GO --> CTR[Контроль]
-style GO fill:#d5e8d4`}
-],tbl:{h:['Этап','Кто','Срок'],r:[
-['Аналитика','Илья','2-5 дн'],['Тест','Лёша','3-5 дн'],['Решение','Ринат','1-2 дн'],
-['Визуал','Ринат','2-3 дн'],['Коробка','Дизайнер','6 дн'],['Инструкция','Ринат+Оксана','3-7 дн'],
-['Сертификация','Оксана','1нед-мес'],['Контент','Ринат+Ваня','3-5 дн']]}},
+M --> I
+B --> ST --> SEND
+I --> OX --> SEND
+SEND --> QC
+style SEND fill:#f8cecc,stroke:#b85450,stroke-width:3px`},
+{h:'Финальная юнит-экономика (перед заказом партии)',m:`flowchart LR
+A[Стоимость доставки\nи склада] --> B[Финальная\nюнит-экономика]
+B --> C[План продаж]
+C --> D{Экономика\nсходится?}
+D -->|Да| E[Заказ партии]
+D -->|Нет| F[СТОП-ПРОЦЕСС]
+style D fill:#fff2cc
+style E fill:#d5e8d4
+style F fill:#f8cecc`}]},
 
-p04:{t:'БП2: Сертификация',s:'Оксана · Опциональный процесс',sections:[
-{h:'Полный процесс',m:`flowchart TD
-START((Старт)) --> D1{Нужна серт-ция?}
-D1 -->|Нет| SKIP[К БП3 логистика]
-D1 -->|Да| P1[Тех. документация]
+lc_cert:{t:'4. Сертификация',s:'Оксана + Ринат · Опциональный этап',sec:[
+{h:'Процесс (если нужна сертификация)',m:`flowchart TD
+D1{Нужна?} -->|Нет| SKIP[К доставке]
+D1 -->|Да| P1[Тех.документация\nс фабрики]
 P1 --> P2[Коды ТН ВЭД]
-P2 --> P3[Проверка ТР ТС]
-P3 --> P4[ДУЛ]
+P2 --> P3[Проверка ТР ТС\nНотификация ФСБ]
+P3 --> P4[ДУЛ с производителем]
 P4 --> P5[Контракт]
 P5 --> S1[Заявка в СО]
 S1 --> S2[Макеты ДС/СС]
-S2 --> S3[Правки от СО]
-S3 --> S4[Инвойс]
-S4 --> D2[Лёша: контроль]
-D2 --> D3[Экспедитор]
-D3 --> D4[Транспорт.доки]
-D4 --> D5[Страхование]
-D5 --> D6[Растаможка]
-D6 --> D7[В лабораторию]
-D7 --> DC{Чест.Знак?}
+S2 --> S3[Правки инструкции\nот СО]
+S3 --> S4[Ринат: версия\nдля сертификатчиков]
+S4 --> D2[Образцы\nв лабораторию]
+D2 --> DC{Честный Знак?}
 DC -->|Да| DM[GTIN + DataMatrix]
-DC -->|Нет| SK[Пропуск]
+DC -->|Нет| R1
 DM --> R1[Получить документы]
-SK --> R1
-R1 --> R2[Проверить реестры]
-R2 --> FIN((Конец))
+R1 --> R2[Проверить в реестрах\nРосаккредитации]
 style D1 fill:#fff2cc
 style DC fill:#fff2cc
-style SKIP fill:#d5e8d4`}
-]},
+style SKIP fill:#d5e8d4`}]},
 
-p05:{t:'БП3: Логистика',s:'Ваня Попов + Оксана',sections:[
-{h:'От фабрики до склада',m:`flowchart TD
-subgraph Подготовка
-  L1[Коды ТН ВЭД] --> L2[Документы]
-  L2 --> L3[Контракт]
-  L3 --> L4[Инвойс + PL]
-  L4 --> L5[Себестоимость]
-  L5 --> L6[Оплата]
+lc_ship:{t:'5. Доставка партии',s:'Оксана + Лёша + Ваня Попов + Брокер',sec:[
+{h:'От фабрики до склада в РФ',m:`flowchart TD
+subgraph Фабрика[На фабрике — Лёша]
+  SH1[Проверка печатных\nматериалов]
+  SH2[Контроль готовности\nфинальные фото]
+  SH3[Проверка оклейки\nзнаки этикетки коды]
+  SH1 --> SH2 --> SH3
 end
-subgraph Отправка
-  SH1[Проверка на фабрике] --> SH2[Оклейка]
-  SH2 --> SH3[Экспедитор]
-  SH3 --> SH4[Транспорт.доки]
-  SH4 --> SH5[Страхование]
-  SH5 --> SH6[Отслеживание]
+subgraph Логистика[В пути — Оксана]
+  SH4[Номинировать\nэкспедитора]
+  SH5[Транспортные доки\nКоносамент СМГС ЦМР]
+  SH6[Проверить веса]
+  SH7[Страхование]
+  SH8[Отслеживание]
+  SH4 --> SH5 --> SH6 --> SH7 --> SH8
 end
-subgraph Растаможка
-  C1[Доки брокеру] --> C2[Пополнить ЕЛС]
-  C2 --> C3[Подать ДТ]
-  C3 --> C4[Выпуск разрешён]
+subgraph Таможня[Растаможка — Брокер + Оксана]
+  C1[Пакет документов\nброкеру]
+  C2[Пополнить ЕЛС\nсбор+пошлина+НДС]
+  C3[Подать ДТ]
+  C4[Выпуск разрешён]
+  C1 --> C2 --> C3 --> C4
 end
-subgraph Приёмка
-  D1[Вывоз со СВХ] --> D2[Доставка]
-  D2 --> D3[Приёмка]
-  D3 --> D4[Закрыв. документы]
+subgraph Склад[Приёмка — Ваня Попов]
+  D1[Вывоз со СВХ]
+  D2[Доставка до склада]
+  D3[Приёмка товара]
+  D4[Закрывающие доки\nУПД отчёт агента]
+  D1 --> D2 --> D3 --> D4
 end
-L6 --> SH1
-SH6 --> C1
+SH3 --> SH4
+SH8 --> C1
 C4 --> D1
-style C4 fill:#d5e8d4`}
-]},
+style C4 fill:#d5e8d4`}]},
 
-p06:{t:'БП4: Контент и карточки',s:'Ринат',sections:[
-{h:'Создание контента',m:`flowchart TD
-subgraph Инструкция
+lc_content:{t:'6. Контент и карточки',s:'Ринат + Дизайнер + ОП',sec:[
+{h:'Создание контента для маркетплейсов',m:`flowchart TD
+subgraph Инструкция[Инструкция — Ринат + Оксана]
   I1[Кит. оригинал] --> I2[Перевод ChatGPT]
-  I2 --> I3[Доработка: ТБ, гарантия]
+  I2 --> I3[Доработка:\nТБ гарантия отказ]
   I3 --> I4[Картинки]
   I4 --> I5{Оксана: ОК?}
   I5 -->|Правки| I3
   I5 -->|Да| I6[Готово]
 end
-subgraph Фото
-  F1[Фотосессия нейросеть] --> F2[Убрать кит. текст]
+subgraph Фото[Фото — Ринат]
+  F1[Фотосессия\nнейросеть] --> F2[Убрать кит.текст]
 end
-subgraph Карточки
-  K1[ТЗ на карточки] --> K2[Ринат: проверка]
-  K2 --> K3[Дизайнер: инфографика]
+subgraph Карточки[Карточки — Ваня + Дизайнер]
+  K1[Ваня: ТЗ] --> K2[Ринат: проверка]
+  K2 --> K3[Дизайнер:\nинфографика 3-5 дн]
   K3 --> K4[Финал. проверка]
 end
-subgraph Запуск
-  L1[Создать карточки] --> L2[Загрузить]
-  L2 --> L3[Цена]
-  L3 --> L4[Запуск продаж]
+subgraph Запуск[Загрузка — менеджеры МП]
+  L1[Создать карточки\nWB Ozon ЯМ]
+  L2[Загрузить контент]
+  L3[Настроить цену]
+  L4[Запуск продаж]
+  L1 --> L2 --> L3 --> L4
 end
 F2 --> K1
 I6 --> L1
 K4 --> L1
 style I5 fill:#fff2cc
-style L4 fill:#d5e8d4`}
-]},
+style L4 fill:#d5e8d4`}]},
 
-p07:{t:'БП5: Продажи',s:'Илья Беликов',w:'Нет формализованного регламента и KPI',sections:[
-{h:'Ежедневный цикл менеджера',m:`flowchart LR
-S((Старт)) --> M1[Остатки]
-M1 --> M2[Цены и акции]
-M2 --> M3[Вопросы покупателей]
-M3 --> M4[Отзывы с Любой]
-M4 --> M5[Реклама]
-M5 --> M6[Отчёт]
-M6 --> E((Конец))`},
-{h:'Каналы и трафик',m:`flowchart LR
-subgraph Каналы
-  WB[WB\nВаня]
-  OZ[Ozon\nКирилл]
-  YM[ЯМ\nАлёна]
+lc_sell:{t:'7. Продажи',s:'Илья Беликов + менеджеры МП',w:'Нет формализованного регламента и KPI',sec:[
+{h:'Ежедневный цикл менеджера МП',m:`flowchart LR
+S((Начало дня)) --> M1[Мониторинг\nостатков]
+M1 --> M2[Управление\nценами и акциями]
+M2 --> M3[Ответы на\nвопросы]
+M3 --> M4[Работа с\nотзывами]
+M4 --> M5[Контроль\nрекламы]
+M5 --> M6[Отчёт\nИлье]
+M6 --> E((Конец дня))`},
+{h:'Каналы продаж',m:`flowchart TD
+subgraph Активные
+  WB[WB — Ваня]
+  OZ[Ozon — Кирилл]
+  YM[ЯМ — Алёна]
   SITE[Сайт]
   MV[МВидео]
   SM[СберММ]
@@ -302,10 +394,10 @@ subgraph Трафик
   T1[Реклама МП]
   T2[Сайт]
   T3[Блогеры]
-  T4[ВК]
-  T5[Дзен]
+  T4[ВК СММ]
+  T5[Дзен СММ]
 end
-subgraph Нет_ресурса
+subgraph Заморожены
   T6[ТГ]
   T7[Инст]
   T8[Ютуб]
@@ -318,129 +410,131 @@ style OZ fill:#d5e8d4
 style YM fill:#d5e8d4
 style T6 fill:#f5f5f5,color:#999
 style T7 fill:#f5f5f5,color:#999
-style T8 fill:#f5f5f5,color:#999`}
-]},
+style T8 fill:#f5f5f5,color:#999`}]},
 
-p08:{t:'БП6: Тех поддержка',s:'Рома',w:'Нет SLA, нет тикетов, нет отчётности',sections:[
+lc_support:{t:'8. Пост-продажа',s:'Рома + команда',w:'Нет SLA, нет тикетов, нет отчётности',sec:[
 {h:'Обработка обращений',m:`flowchart TD
-IN1[Телефон] --> MISHA[Миша]
-IN2[Отзывы МП] --> LUBA[Люба]
+IN1[Телефон\nмессенджеры] --> MISHA[Миша]
+IN2[Отзывы на МП] --> LUBA[Люба]
 IN3[Гарантия] --> SASHA[Саша]
 MISHA --> D1{Тип?}
 D1 -->|Консультация| A1[Ответ]
-D1 -->|Возврат| A2[Возврат]
+D1 -->|Возврат| A2[Оформление]
 D1 -->|Ремонт| SASHA
 LUBA --> A3[Ответ на отзыв]
 LUBA --> FB[Обратная связь]
 SASHA --> D2{Что делать?}
 D2 -->|Ремонт| A5[Ремонт]
 D2 -->|Замена| A6[Замена]
-A5 --> A7[Возврат клиенту]
-FB --> RINAT[Ринат: доработка]
+FB --> RINAT[Ринат: доработка\n→ новый цикл]
 MISHA -.-> ROMA[Рома: эскалация]
 LUBA -.-> ROMA
 SASHA -.-> ROMA
 style D1 fill:#fff2cc
 style D2 fill:#fff2cc
-style ROMA fill:#dae8fc`}
-]},
+style ROMA fill:#dae8fc`}]},
 
-p09:{t:'БП7: Финансовая управленка',s:'Галя · 66 листов Google Sheets · 8710+ записей',w:'Финплан без юрлиц · Ручной ввод Income · Всё зависит от Гали',sections:[
-{h:'Где финансы встроены в каждый БП',m:`flowchart TD
-subgraph БП1_Отбор[БП1: Отбор товара]
+ops_fin:{t:'Финансы: операционные циклы',s:'Галя · 66 листов · 8710+ записей',w:'Финплан без юрлиц · Ручной ввод Income · Всё на Гале',sec:[
+{h:'Где финансы в жизненном цикле товара',m:`flowchart LR
+subgraph Отбор
   F1[Предварит.\nюнит-экономика]
+end
+subgraph Производство
   F2[Финальная\nюнит-экономика]
-  F3{Экономика\nсходится?}
-  F1 --> F2 --> F3
-  F3 -->|Нет| STOP1[Стоп-процесс]
-  F3 -->|Да| GO1[Запуск партии]
+  F3{Экономика?}
+  F2 --> F3
+  F3 -->|Нет| STOP[Стоп]
+  F3 -->|Да| GO[Партия]
 end
-subgraph БП2_Серт[БП2: Сертификация]
-  F4[Расчёт себестоимости\nлогистика+пошлины+серт+агент]
-  F5[Счёт клиенту]
-  F6[Оплата поставщику\nконтроль перевода]
-  F4 --> F5 --> F6
+subgraph Закупка
+  F4[Purchasing:\nоплата в CNY]
 end
-subgraph БП3_Логист[БП3: Логистика]
-  F7[Purchasing payments\nсебестоимость по заказам]
-  F8[Пополнить ЕЛС\nсбор+пошлина+НДС]
-  F9[Закрывающие\nУПД + отчёт агента]
-  F7 --> F8 --> F9
+subgraph Доставка
+  F5[ЕЛС:\nсбор+пошлина\n+НДС]
 end
-subgraph БП5_Продажи[БП5: Продажи]
-  F10[Income to accoun\nпоступления с МП]
-  F11[Costs\nрасходы по статьям]
-  F12[Payment Calc\nP&L по товарам]
-  F10 --> F12
-  F11 --> F12
+subgraph Продажи
+  F6[Income:\nпоступления МП]
+  F7[Costs:\nрасходы]
 end
-subgraph Отчётность
-  F13[Финплан\nфакт+прогноз]
-  F14[Summary Enjoy\nдолг партнёру]
-  F15[Дивиденды\nИВ/ИЛ/Р/Китай]
-  F12 --> F13
-  F12 --> F14
-  F12 --> F15
+subgraph Итог
+  F8[P&L\nпо товарам]
+  F9[Финплан]
+  F10[Enjoy отчёт]
+  F11[Дивиденды]
 end
-GO1 --> F4
-F6 --> F7
-F9 --> F10
-style STOP1 fill:#f8cecc
-style GO1 fill:#d5e8d4
+F1 --> F2
+GO --> F4
+F4 --> F5
+F5 --> F6
+F6 --> F8
+F7 --> F8
+F8 --> F9
+F8 --> F10
+F8 --> F11
 style F3 fill:#fff2cc
-style F12 fill:#fff2cc`},
-{h:'Ежедневный процесс Гали',m:`flowchart LR
-D1[Открыть выписки\nвсех банков] --> D2[Внести каждую\nтранзакцию]
-D2 --> D3[Заполнить:\nДата Сумма Счёт\nСтатья Компания Проект]
-D3 --> D4{Перемещение\nмежду счетами?}
-D4 -->|Да| D5[2 строки:\nрасход + приход\nпроверка = 0]
+style STOP fill:#f8cecc
+style GO fill:#d5e8d4`},
+{h:'Ежедневно (Галя)',m:`flowchart LR
+D1[Открыть выписки\nвсех банков] --> D2[Внести каждую\nтранзакцию в Операции]
+D2 --> D3[Заполнить:\nДата Сумма Счёт\nСтатья Компания]
+D3 --> D4{Перемещение?}
+D4 -->|Да| D5[2 строки\nрасход+приход=0]
 D4 -->|Нет| D6[1 строка]
-D5 --> D7[Авто-разнос в\nIncome Costs\nРаспр.финансов]
+D5 --> D7[Авто-разнос]
 D6 --> D7
 style D4 fill:#fff2cc`},
-{h:'Еженедельный процесс Гали',m:`flowchart LR
-W1[Заполнить Income\nпо каждому МП\nи модели] --> W2[Обновить себес\nFIFO по заказам]
-W2 --> W3[Проверить\nPayment Calc P&L]
-W3 --> W4[Обновить Финплан\nфакт + прогноз]
-W4 --> W5[Прогнать 11\nпроверочных листов]
-W5 --> D{Все = 0?}
-D -->|Нет| W6[Найти ошибку\nв Операциях]
+{h:'Еженедельно (Галя)',m:`flowchart LR
+W1[Income\nпо МП] --> W2[себес\nFIFO]
+W2 --> W3[P&L]
+W3 --> W4[Финплан\nфакт+прогноз]
+W4 --> W5[11 проверок]
+W5 --> D{Все=0?}
+D -->|Нет| W6[Ошибка]
 D -->|Да| W7[Готово]
 W6 --> W5
 style D fill:#fff2cc
-style W7 fill:#d5e8d4`},
-{h:'Потоки данных между 66 листами',m:`flowchart TD
-REF[СПРАВОЧНИКИ\n34 кошелька\n62 статьи ДДС\n28 заказов] --> OPS[ОПЕРАЦИИ\nЦентральный журнал\n8710+ записей]
-OPS --> INC[Income 3 листа\nпоступления с МП]
-OPS --> CST[Costs 2 листа\nрасходы по статьям]
-OPS --> PUR[Purchasing 11 листов\nсебестоимость по заказам]
+style W7 fill:#d5e8d4`}]},
+
+ops_data:{t:'Финансы: 66 листов',s:'Структура данных и потоки',sec:[
+{h:'Потоки между группами листов',m:`flowchart TD
+REF[СПРАВОЧНИКИ 2л\n34 кошелька\n62 статьи ДДС\n28 заказов] --> OPS[ОПЕРАЦИИ 4л\nЦентральный журнал\n8710+ записей]
+OPS --> INC[Income 3л\nпоступления с МП]
+OPS --> CST[Costs 2л\nрасходы]
+OPS --> PUR[Purchasing 11л\nсебестоимость]
 OPS --> FNA[Распр. финансов\nостатки 34 счетов]
-PUR --> SEB[себес R001-R0033\nFIFO распределение]
-INC --> PL[PAYMENT CALCULATION\nСводный P&L\n10 листов по товарам]
+PUR --> SEB[себес R00X 6л\nFIFO по заказам]
+INC --> PL[Payment Calc 10л\nP&L по товарам]
 CST --> PL
 SEB --> PL
 FNA --> PL
-PL --> FP[Финплан 5 листов\nфакт + прогноз]
-PL --> ENJ[Summary for Enjoy\nдолг перед партнёром]
-PL --> DIV[Дивиденды\nИВ 40% + остальные]
-OPS --> CHK[11 ПРОВЕРОЧНЫХ\nперекрёстная сверка]
+PL --> FP[Финплан 5л]
+PL --> ENJ[Enjoy отчёт 4л]
+PL --> DIV[Дивиденды]
+OPS --> CHK[11 проверочных\nсверка данных]
 style REF fill:#dae8fc
 style OPS fill:#d5e8d4
 style PL fill:#fff2cc
 style CHK fill:#f8cecc`}
-],tbl:{h:['Лист/Группа','Что делает','Откуда данные','Куда передаёт'],r:[
-['Справочники (2)','Кошельки, статьи ДДС, проекты, заказы','Ручной ввод Галя','Выпадающие списки во всех листах'],
-['Операции (4)','Центральный журнал всех транзакций','Банковские выписки ежедневно','Income, Costs, Распр.финансов, проверки'],
-['Income (3)','Поступления с МП по неделям и моделям','Операции + ЛК маркетплейсов','Payment Calculation'],
-['Purchasing (11)','Себестоимость по заказам, оплаты в CNY','Инвойсы поставщиков','себес R00X, Payment Calc'],
-['себес R001-R0033 (6)','FIFO: какой товар из какого заказа продан','Income + Purchasing','Payment Calculation'],
-['Costs (2)','Все расходы кроме себестоимости','Операции авто','Payment Calculation'],
-['Payment Calc (10)','P&L по товарам: профит Enjoy 50%','Income+Costs+себес+Распр.фин','Финплан, Enjoy, Дивиденды'],
-['Финплан (5)','Факт + прогноз, остатки по неделям','Payment Calc + ручной прогноз','Решения о платежах'],
-['Summary Enjoy (4)','Отчёт партнёру: произведено, долг','Payment Calc + Purchasing','Переговоры с Enjoy'],
-['Проверочные (11)','Сверка данных между листами','Все листы','Если не 0 = ошибка']]}},
+],tbl:{h:['Группа','Листов','Что делает','Источник','Потребитель'],r:[
+['Справочники','2','Кошельки, статьи ДДС, проекты','Ручной ввод','Выпадающие списки везде'],
+['Операции','4','Журнал всех транзакций','Банковские выписки','Income, Costs, проверки'],
+['Income','3','Поступления с МП по неделям','Операции + ЛК МП','Payment Calc'],
+['Purchasing','11','Себестоимость по заказам CNY','Инвойсы поставщиков','себес, Payment Calc'],
+['себес R00X','6','FIFO: из какого заказа продано','Income + Purchasing','Payment Calc'],
+['Costs','2','Расходы без себестоимости','Операции авто','Payment Calc'],
+['Payment Calc','10','P&L по товарам, профит 50%','Все выше','Финплан, Enjoy, Дивиденды'],
+['Финплан','5','Факт + прогноз по неделям','Payment Calc + прогноз','Решения о платежах'],
+['Enjoy отчёт','4','Долг перед партнёром','Payment Calc','Переговоры с Enjoy'],
+['Проверочные','11','Сверка между листами','Все листы','Если не 0 = ошибка']
+]}},
 
-p10:{t:'БП8: ВЭД воронка',s:'Иван Синчук',w:'Нет CRM · Нет конверсий · Нет пост-продажи',sections:[
+ved:{t:'ВЭД — воронка продаж',s:'Иван Синчук · Отдельный бизнес',w:'Нет CRM · Нет конверсий · Нет пост-продажи',sec:[
+{h:'Продукты',m:`flowchart LR
+P1[Платная\nконсультация] --- P2[Платный\nвебинар] --- P3[Курс: Белый\nИмпорт с 0] --- P4[Сопровождение\nимпорта]
+style P1 fill:#d5e8d4
+style P2 fill:#d5e8d4
+style P3 fill:#dae8fc
+style P4 fill:#dae8fc`},
 {h:'Воронка 1: Вебинарная',m:`flowchart LR
 R[Ирина: рилсы] --> BOT[Бот]
 INV[Настя: инвайт] --> BOT
@@ -460,24 +554,25 @@ CON --> ART[Артём: дожим]
 ART --> SALE[Продажа]
 style SALE fill:#d5e8d4`}
 ],tbl:{h:['Роль','Кто','Действие'],r:[
-['Трафик','Ирина Мурадова','Рилсы'],['Инвайт','Анастасия Ерлих','Приглашение'],
-['Консультации','Иван Синчук','Экспертность'],['Вебинары','Синчук+Попов','Контент'],
-['Операционка','Дарья Любченкова','Координация'],['Продажи','Артём Кожевников','Дожим']]}}
+['Трафик','Ирина Мурадова','Рилсы'],
+['Инвайт','Анастасия Ерлих','Приглашение ЦА'],
+['Консультации','Иван Синчук','Экспертиза'],
+['Вебинары','Синчук+Попов','Контент+продукт'],
+['Операционка','Дарья Любченкова','Координация'],
+['Продажи','Артём Кожевников','Дожим']
+]}}
 };
 
 const root=document.getElementById('root');
-let cur='p01';
-
 async function go(id,el){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   el.classList.add('active');
-  cur=id;
-  const p=D[id];
+  const p=P[id];
   let h=`<div class="header"><h2>${p.t}</h2><div class="sub">${p.s}</div>`;
   if(p.w)h+=`<div class="warn">${p.w}</div>`;
   h+=`</div><div class="content">`;
-  p.sections.forEach((s,i)=>{
-    h+=`<div class="section"><h3>${s.h}</h3><div class="diagram-box"><div class="mermaid" id="m${id}${i}">${s.m}</div></div><div class="zoom-hint">Прокрутка для просмотра · Ctrl+колесо для масштаба браузера</div></div>`;
+  p.sec.forEach((s,i)=>{
+    h+=`<div class="section"><h3>${s.h}</h3><div class="diagram-box"><div class="mermaid">${s.m}</div></div></div>`;
   });
   if(p.tbl){
     h+=`<table class="info-table"><tr>`;
@@ -491,9 +586,8 @@ async function go(id,el){
   await mermaid.run({querySelector:'.mermaid'});
   root.scrollTop=0;
 }
-
-mermaid.initialize({startOnLoad:false,theme:'default',flowchart:{useMaxWidth:false,htmlLabels:true,curve:'basis',padding:15,nodeSpacing:30,rankSpacing:40},securityLevel:'loose'});
-go('p01',document.querySelector('.nav-item'));
+mermaid.initialize({startOnLoad:false,theme:'default',flowchart:{useMaxWidth:false,htmlLabels:true,curve:'basis',padding:15,nodeSpacing:25,rankSpacing:35},securityLevel:'loose'});
+go('org',document.querySelector('.nav-item'));
 </script>
 </body>
 </html>
